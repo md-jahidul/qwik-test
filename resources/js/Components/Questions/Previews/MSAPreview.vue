@@ -1,5 +1,11 @@
 <template>
     <div class="bg-white shadow px-4 py-5 border-b-4 border-gray-800 mb-6">
+        <div class="p-field-radiobutton items-center mb-2">
+            <input type="checkbox" v-model="isSelected"
+                   :id="'q_id'+1" name="q_id" :value="question.isSelected"
+                   @change="checkOrUncheck"
+                   class="rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+        </div>
         <h5 class="inline-block bg-green-100 rounded-sm px-2 py-1 mb-4 text-xs leading-3 text-green-700">{{ question.skill }}</h5>
         <div class="q-data mb-4">
             <div class="text-sm" v-html="question.question"></div>
@@ -41,20 +47,38 @@
     </div>
 </template>
 <script>
+    import Checkbox from "primevue/checkbox";
+
     export default {
         name: "MSAPreview",
+        components: {Checkbox},
         props: {
             question: Object,
+            selected: Boolean
+        },
+        watch: {
+            selected: {
+                immediate: true,
+                handler(value) {
+                    this.isSelected = value;
+                }
+            }
         },
         data() {
             return {
-                collapse: true
+                collapse: true,
+                isSelected: false
             }
         },
         created() {
             this.$nextTick(function() {
                 window.renderMathInElement(this.$el);
             });
+        },
+        methods: {
+            checkOrUncheck() {
+                this.$emit('change-single-item', this.question, this.isSelected)
+            }
         }
     }
 </script>

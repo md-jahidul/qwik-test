@@ -431,6 +431,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var primevue_checkbox__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! primevue/checkbox */ "./node_modules/primevue/checkbox/index.js");
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -474,20 +481,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "MSAPreview",
+  components: {
+    Checkbox: primevue_checkbox__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   props: {
-    question: Object
+    question: Object,
+    selected: Boolean
+  },
+  watch: {
+    selected: {
+      immediate: true,
+      handler: function handler(value) {
+        this.isSelected = value;
+      }
+    }
   },
   data: function data() {
     return {
-      collapse: true
+      collapse: true,
+      isSelected: false
     };
   },
   created: function created() {
     this.$nextTick(function () {
       window.renderMathInElement(this.$el);
     });
+  },
+  methods: {
+    checkOrUncheck: function checkOrUncheck() {
+      this.$emit('change-single-item', this.question, this.isSelected);
+    }
   }
 });
 
@@ -1686,6 +1712,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1739,6 +1775,8 @@ __webpack_require__.r(__webpack_exports__);
       questions: [],
       pagination: {},
       difficultyFilter: [],
+      selectAll: false,
+      selected: [],
       typeFilter: [],
       skillFilter: null,
       topicFilter: null,
@@ -1768,6 +1806,56 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    removeAll: function removeAll() {
+      var _this2 = this;
+      var questionIds = [];
+      this.questions.map(function (item) {
+        if (item.isSelected) {
+          questionIds.push(item.id);
+        }
+      });
+      var _this = this;
+      this.$confirm.require({
+        header: this.__('Confirm'),
+        message: this.__('Do you want to remove this question?'),
+        icon: 'pi pi-info-circle',
+        acceptClass: 'p-button-danger',
+        rejectLabel: this.__('Cancel'),
+        acceptLabel: this.__('Remove'),
+        accept: function accept() {
+          _this.processing = true;
+          axios.post(route('exams.remove_selected_question', {
+            exam: _this2.exam.id,
+            section: _this2.currentSection.id
+          }), {
+            question_ids: questionIds
+          }).then(function (response) {
+            alert('Success');
+            // _this.questions[index].disabled = true;
+            // _this.showToast('Removed', 'Question removed successfully');
+            // _this.processing = false;
+          })["catch"](function (error) {
+            _this.processing = false;
+          });
+        },
+        reject: function reject() {
+          _this.processing = false;
+        }
+      });
+    },
+    checkAll: function checkAll() {
+      var _this3 = this;
+      this.questions.map(function (item) {
+        return item.isSelected = _this3.selectAll;
+      });
+    },
+    changeSingleItem: function changeSingleItem(question, isSelected) {
+      this.questions.map(function (item) {
+        if (item.id == question.id) {
+          item.isSelected = isSelected;
+        }
+      });
+    },
     viewQuestions: function viewQuestions(section) {
       this.qEditFlag = false;
       this.currentSection = section;
@@ -1831,7 +1919,8 @@ __webpack_require__.r(__webpack_exports__);
         var data = response.data.questions.data;
         _this.pagination = response.data.questions.meta.pagination;
         data.forEach(function (item) {
-          return _this.questions.push(item);
+          item.isSelected = false;
+          _this.questions.push(item);
         });
         _this.loading = false;
       })["catch"](function (error) {
@@ -1879,7 +1968,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     removeQuestion: function removeQuestion(questionId, index) {
-      var _this2 = this;
+      var _this4 = this;
       var _this = this;
       this.$confirm.require({
         header: this.__('Confirm'),
@@ -1891,8 +1980,8 @@ __webpack_require__.r(__webpack_exports__);
         accept: function accept() {
           _this.processing = true;
           axios.post(route('exams.remove_question', {
-            exam: _this2.exam.id,
-            section: _this2.currentSection.id
+            exam: _this4.exam.id,
+            section: _this4.currentSection.id
           }), {
             question_id: questionId
           }).then(function (response) {
@@ -4315,6 +4404,52 @@ var render = function () {
       staticClass: "bg-white shadow px-4 py-5 border-b-4 border-gray-800 mb-6",
     },
     [
+      _c("div", { staticClass: "p-field-radiobutton items-center mb-2" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.isSelected,
+              expression: "isSelected",
+            },
+          ],
+          staticClass:
+            "rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50",
+          attrs: { type: "checkbox", id: "q_id" + 1, name: "q_id" },
+          domProps: {
+            value: _vm.question.isSelected,
+            checked: Array.isArray(_vm.isSelected)
+              ? _vm._i(_vm.isSelected, _vm.question.isSelected) > -1
+              : _vm.isSelected,
+          },
+          on: {
+            change: [
+              function ($event) {
+                var $$a = _vm.isSelected,
+                  $$el = $event.target,
+                  $$c = $$el.checked ? true : false
+                if (Array.isArray($$a)) {
+                  var $$v = _vm.question.isSelected,
+                    $$i = _vm._i($$a, $$v)
+                  if ($$el.checked) {
+                    $$i < 0 && (_vm.isSelected = $$a.concat([$$v]))
+                  } else {
+                    $$i > -1 &&
+                      (_vm.isSelected = $$a
+                        .slice(0, $$i)
+                        .concat($$a.slice($$i + 1)))
+                  }
+                } else {
+                  _vm.isSelected = $$c
+                }
+              },
+              _vm.checkOrUncheck,
+            ],
+          },
+        }),
+      ]),
+      _vm._v(" "),
       _c(
         "h5",
         {
@@ -6411,9 +6546,9 @@ var render = function () {
                       ]
                     ),
                     _vm._v(
-                      "\n                                " +
+                      "\n                                    " +
                         _vm._s(_vm.__("Sections")) +
-                        "\n                            "
+                        "\n                                "
                     ),
                   ]
                 ),
@@ -6531,9 +6666,9 @@ var render = function () {
                           ]
                         ),
                         _vm._v(
-                          "\n                                " +
+                          "\n                                    " +
                             _vm._s(_vm.__("Filters")) +
-                            "\n                            "
+                            "\n                                "
                         ),
                       ]
                     ),
@@ -6893,18 +7028,96 @@ var render = function () {
                                 ),
                               ]
                             ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass:
+                                  "qt-btn-sm qt-btn-danger float-right",
+                                on: { click: _vm.removeAll },
+                              },
+                              [_vm._v(_vm._s(_vm.__("Remove All")))]
+                            ),
                           ]),
                           _vm._v(" "),
                           _c(
                             "div",
                             { staticClass: "grid grid-cols-1 gap-4 flex-wrap" },
                             [
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "p-field-radiobutton items-center",
+                                },
+                                [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.selectAll,
+                                        expression: "selectAll",
+                                      },
+                                    ],
+                                    staticClass:
+                                      "rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50",
+                                    attrs: { type: "checkbox" },
+                                    domProps: {
+                                      checked: Array.isArray(_vm.selectAll)
+                                        ? _vm._i(_vm.selectAll, null) > -1
+                                        : _vm.selectAll,
+                                    },
+                                    on: {
+                                      change: [
+                                        function ($event) {
+                                          var $$a = _vm.selectAll,
+                                            $$el = $event.target,
+                                            $$c = $$el.checked ? true : false
+                                          if (Array.isArray($$a)) {
+                                            var $$v = null,
+                                              $$i = _vm._i($$a, $$v)
+                                            if ($$el.checked) {
+                                              $$i < 0 &&
+                                                (_vm.selectAll = $$a.concat([
+                                                  $$v,
+                                                ]))
+                                            } else {
+                                              $$i > -1 &&
+                                                (_vm.selectAll = $$a
+                                                  .slice(0, $$i)
+                                                  .concat($$a.slice($$i + 1)))
+                                            }
+                                          } else {
+                                            _vm.selectAll = $$c
+                                          }
+                                        },
+                                        _vm.checkAll,
+                                      ],
+                                    },
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "label",
+                                    { staticClass: "text-sm text-gray-800" },
+                                    [_vm._v(_vm._s(_vm.__("Select All")))]
+                                  ),
+                                ]
+                              ),
+                              _vm._v(" "),
                               _vm._l(_vm.questions, function (question, index) {
                                 return [
                                   question.question_type === "MSA"
                                     ? [
                                         _c("MSAPreview", {
-                                          attrs: { question: question },
+                                          attrs: {
+                                            question: question,
+                                            selected: _vm.selectAll,
+                                          },
+                                          on: {
+                                            "change-single-item":
+                                              _vm.changeSingleItem,
+                                          },
                                           scopedSlots: _vm._u(
                                             [
                                               {
@@ -7368,11 +7581,11 @@ var render = function () {
                                     },
                                     [
                                       _vm._v(
-                                        "\n                                        " +
+                                        "\n                                            " +
                                           _vm._s(
                                             _vm.__("no_more_data_message")
                                           ) +
-                                          "\n                                    "
+                                          "\n                                        "
                                       ),
                                     ]
                                   ),

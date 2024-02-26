@@ -98,11 +98,21 @@
                                 <div v-else>
                                     <div class="text-sm mb-4">
                                         <span class="text-gray-500 font-normal">{{ pagination.total }} {{ __('items_found_message') }}.</span>
+                                        <button class="qt-btn-sm qt-btn-danger float-right" @click="removeAll">{{ __('Remove All') }}</button>
                                     </div>
                                     <div class="grid grid-cols-1 gap-4 flex-wrap">
+                                        <div class="p-field-radiobutton items-center">
+<!--                                            <template>-->
+                                                <input type="checkbox" v-model="selectAll" @change="checkAll"
+                                                       class="rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+<!--                                                <Checkbox :id="'q_id'+1" name="q_id" :value="1" v-model="selectAll" @change="checkAll"/>-->
+                                                <label class="text-sm text-gray-800">{{ __('Select All') }}</label>
+<!--                                            </template>-->
+
+                                        </div>
                                         <template v-for="(question, index) in questions">
                                             <template v-if="question.question_type === 'MSA'">
-                                                <MSAPreview :question="question">
+                                                <MSAPreview :question="question" :selected="selectAll" @change-single-item="changeSingleItem">
                                                     <template #action>
                                                         <button class="qt-btn-sm" @click="qEditFlag ? addQuestion(question.id, index) : removeQuestion(question.id, index)" v-html="qEditFlag ? __('Add') : __('Remove')"
                                                                 :class="[qEditFlag ? 'qt-btn-success' : 'qt-btn-danger', question.disabled || processing ? 'opacity-25': '']"
@@ -244,6 +254,8 @@
                 questions: [],
                 pagination: {},
                 difficultyFilter: [],
+                selectAll: false,
+                selected: [],
                 typeFilter: [],
                 skillFilter: null,
                 topicFilter: null,
@@ -272,6 +284,50 @@
             }
         },
         methods: {
+            removeAll() {
+                let questionIds = [];
+                this.questions.map((item) => {
+                    if (item.isSelected) {
+                        questionIds.push(item.id)
+                    }
+                })
+
+                let _this = this;
+                this.$confirm.require({
+                    header: this.__('Confirm'),
+                    message: this.__('Do you want to remove this question?'),
+                    icon: 'pi pi-info-circle',
+                    acceptClass: 'p-button-danger',
+                    rejectLabel: this.__('Cancel'),
+                    acceptLabel: this.__('Remove'),
+                    accept: () => {
+                        _this.processing = true;
+                        axios.post(route('exams.remove_selected_question', {exam: this.exam.id, section: this.currentSection.id}), { question_ids: questionIds })
+                            .then(function (response) {
+                                alert('Success')
+                                // _this.questions[index].disabled = true;
+                                // _this.showToast('Removed', 'Question removed successfully');
+                                // _this.processing = false;
+                            })
+                            .catch(function (error) {
+                                _this.processing = false;
+                            });
+                    },
+                    reject: () => {
+                        _this.processing = false;
+                    }
+                });
+            },
+            checkAll() {
+                this.questions.map((item) => item.isSelected = this.selectAll)
+            },
+            changeSingleItem(question, isSelected){
+                this.questions.map((item) => {
+                    if (item.id == question.id) {
+                        item.isSelected = isSelected;
+                    }
+                })
+            },
             viewQuestions(section) {
                 this.qEditFlag = false;
                 this.currentSection = section;
@@ -335,7 +391,10 @@
                     .then(function (response) {
                         let data = response.data.questions.data;
                         _this.pagination = response.data.questions.meta.pagination;
-                        data.forEach((item) => _this.questions.push(item));
+                        data.forEach((item) => {
+                            item.isSelected = false;
+                            _this.questions.push(item)
+                        });
                         _this.loading = false;
                     })
                     .catch(function (error) {

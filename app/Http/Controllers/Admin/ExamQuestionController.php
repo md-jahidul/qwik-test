@@ -160,4 +160,24 @@ class ExamQuestionController extends Controller
             return response()->json(['status' => 'error', 'message' => $e]);
         }
     }
+
+    public function removeSelectedQuestion(Exam $exam, ExamSection $section)
+    {
+        try {
+            $questions = Question::with('questionType:id,type')->whereIn('id', request()->get('question_ids'))->get('id');
+
+            foreach ($questions as $question){
+                $section->questions()->detach($question->id);
+
+                $section->updateMeta();
+                $exam->updateMeta();
+            }
+
+            return response()->json(['status' => 'success', 'message' => 'Question Removed Successfully'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e]);
+        }
+//        dd(request()->get('question_ids'));
+    }
 }

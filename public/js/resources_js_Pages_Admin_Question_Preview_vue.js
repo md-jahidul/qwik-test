@@ -289,6 +289,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var primevue_checkbox__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! primevue/checkbox */ "./node_modules/primevue/checkbox/index.js");
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -332,20 +339,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "MSAPreview",
+  components: {
+    Checkbox: primevue_checkbox__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   props: {
-    question: Object
+    question: Object,
+    selected: Boolean
+  },
+  watch: {
+    selected: {
+      immediate: true,
+      handler: function handler(value) {
+        this.isSelected = value;
+      }
+    }
   },
   data: function data() {
     return {
-      collapse: true
+      collapse: true,
+      isSelected: false
     };
   },
   created: function created() {
     this.$nextTick(function () {
       window.renderMathInElement(this.$el);
     });
+  },
+  methods: {
+    checkOrUncheck: function checkOrUncheck() {
+      this.$emit('change-single-item', this.question, this.isSelected);
+    }
   }
 });
 
@@ -2331,6 +2357,52 @@ var render = function () {
       staticClass: "bg-white shadow px-4 py-5 border-b-4 border-gray-800 mb-6",
     },
     [
+      _c("div", { staticClass: "p-field-radiobutton items-center mb-2" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.isSelected,
+              expression: "isSelected",
+            },
+          ],
+          staticClass:
+            "rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50",
+          attrs: { type: "checkbox", id: "q_id" + 1, name: "q_id" },
+          domProps: {
+            value: _vm.question.isSelected,
+            checked: Array.isArray(_vm.isSelected)
+              ? _vm._i(_vm.isSelected, _vm.question.isSelected) > -1
+              : _vm.isSelected,
+          },
+          on: {
+            change: [
+              function ($event) {
+                var $$a = _vm.isSelected,
+                  $$el = $event.target,
+                  $$c = $$el.checked ? true : false
+                if (Array.isArray($$a)) {
+                  var $$v = _vm.question.isSelected,
+                    $$i = _vm._i($$a, $$v)
+                  if ($$el.checked) {
+                    $$i < 0 && (_vm.isSelected = $$a.concat([$$v]))
+                  } else {
+                    $$i > -1 &&
+                      (_vm.isSelected = $$a
+                        .slice(0, $$i)
+                        .concat($$a.slice($$i + 1)))
+                  }
+                } else {
+                  _vm.isSelected = $$c
+                }
+              },
+              _vm.checkOrUncheck,
+            ],
+          },
+        }),
+      ]),
+      _vm._v(" "),
       _c(
         "h5",
         {
