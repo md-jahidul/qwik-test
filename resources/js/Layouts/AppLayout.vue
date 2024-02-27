@@ -41,7 +41,7 @@
             <div class="w-72 flex flex-col">
                 <div class="border-r border-gray-200 pb-4 flex flex-col flex-grow overflow-y-auto">
                     <div class="flex-shrink-0 h-16 px-6 border-b border-gray-100 border-opacity-10 flex items-center">
-                        <a :href="route('welcome')">
+                        <a :href="route('user_dashboard')">
                             <img :src="$page.props.assetUrl + $page.props.general.white_logo_path"
                                  :alt="$page.props.general.app_name" class="h-8 w-auto">
                         </a>

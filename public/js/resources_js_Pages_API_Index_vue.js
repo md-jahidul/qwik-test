@@ -5182,7 +5182,7 @@ var render = function () {
                     "flex-shrink-0 h-16 px-6 border-b border-gray-100 border-opacity-10 flex items-center",
                 },
                 [
-                  _c("a", { attrs: { href: _vm.route("welcome") } }, [
+                  _c("a", { attrs: { href: _vm.route("user_dashboard") } }, [
                     _c("img", {
                       staticClass: "h-8 w-auto",
                       attrs: {

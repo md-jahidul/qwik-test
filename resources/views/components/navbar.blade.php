@@ -25,9 +25,9 @@
                     <div class="flow-root">
                         <a href="{{ route('learn_practice') }}" class="-m-2 p-2 block font-medium text-gray-900">{{ __('Learn & Practice') }}</a>
                     </div>
-                    <div class="flow-root">
-                        <a href="{{ route('quiz_dashboard') }}" class="-m-2 p-2 block font-medium text-gray-900">{{ __('Quizzes') }}</a>
-                    </div>
+{{--                    <div class="flow-root">--}}
+{{--                        <a href="{{ route('quiz_dashboard') }}" class="-m-2 p-2 block font-medium text-gray-900">{{ __('Quizzes') }}</a>--}}
+{{--                    </div>--}}
                     <div class="flow-root">
                         <a href="{{ route('pricing') }}#explore" class="-m-2 p-2 block font-medium text-gray-900">{{ __('Pricing') }}</a>
                     </div>
@@ -66,7 +66,7 @@
                             <div class="h-full flex rtl:space-x-reverse space-x-8">
                                 <a href="{{ url('/') }}#explore" class="flex items-center font-medium text-gray-700 hover:text-gray-800">{{ __('Explore') }}</a>
                                 <a href="{{ route('learn_practice') }}" class="flex items-center font-medium text-gray-700 hover:text-gray-800">{{ __('Learn & Practice') }}</a>
-                                <a href="{{ route('quiz_dashboard') }}" class="flex items-center font-medium text-gray-700 hover:text-gray-800">{{ __('Quizzes') }}</a>
+{{--                                <a href="{{ route('quiz_dashboard') }}" class="flex items-center font-medium text-gray-700 hover:text-gray-800">{{ __('Quizzes') }}</a>--}}
                                 <a href="{{ route('pricing') }}" class="flex items-center font-medium text-gray-700 hover:text-gray-800">{{ __('Pricing') }}</a>
                             </div>
                         </div>
