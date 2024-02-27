@@ -168,16 +168,13 @@ class ExamQuestionController extends Controller
 
             foreach ($questions as $question){
                 $section->questions()->detach($question->id);
-
                 $section->updateMeta();
                 $exam->updateMeta();
             }
 
             return response()->json(['status' => 'success', 'message' => 'Question Removed Successfully'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e]);
         }
-//        dd(request()->get('question_ids'));
     }
 }

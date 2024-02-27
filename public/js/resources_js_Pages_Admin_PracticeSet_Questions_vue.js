@@ -516,6 +516,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var primevue_checkbox__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! primevue/checkbox */ "./node_modules/primevue/checkbox/index.js");
+/* harmony import */ var events__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! events */ "./node_modules/events/events.js");
+/* harmony import */ var events__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(events__WEBPACK_IMPORTED_MODULE_1__);
 //
 //
 //
@@ -564,6 +566,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -573,7 +576,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     question: Object,
-    selected: Boolean
+    selected: Boolean,
+    qEditFlag: Boolean
   },
   watch: {
     selected: {
@@ -4482,51 +4486,53 @@ var render = function () {
       staticClass: "bg-white shadow px-4 py-5 border-b-4 border-gray-800 mb-6",
     },
     [
-      _c("div", { staticClass: "p-field-radiobutton items-center mb-2" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.isSelected,
-              expression: "isSelected",
-            },
-          ],
-          staticClass:
-            "rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50",
-          attrs: { type: "checkbox", id: "q_id" + 1, name: "q_id" },
-          domProps: {
-            value: _vm.question.isSelected,
-            checked: Array.isArray(_vm.isSelected)
-              ? _vm._i(_vm.isSelected, _vm.question.isSelected) > -1
-              : _vm.isSelected,
-          },
-          on: {
-            change: [
-              function ($event) {
-                var $$a = _vm.isSelected,
-                  $$el = $event.target,
-                  $$c = $$el.checked ? true : false
-                if (Array.isArray($$a)) {
-                  var $$v = _vm.question.isSelected,
-                    $$i = _vm._i($$a, $$v)
-                  if ($$el.checked) {
-                    $$i < 0 && (_vm.isSelected = $$a.concat([$$v]))
-                  } else {
-                    $$i > -1 &&
-                      (_vm.isSelected = $$a
-                        .slice(0, $$i)
-                        .concat($$a.slice($$i + 1)))
-                  }
-                } else {
-                  _vm.isSelected = $$c
-                }
+      !_vm.qEditFlag
+        ? _c("div", { staticClass: "p-field-radiobutton items-center mb-2" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.isSelected,
+                  expression: "isSelected",
+                },
+              ],
+              staticClass:
+                "rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50",
+              attrs: { type: "checkbox", id: "q_id" + 1, name: "q_id" },
+              domProps: {
+                value: _vm.question.isSelected,
+                checked: Array.isArray(_vm.isSelected)
+                  ? _vm._i(_vm.isSelected, _vm.question.isSelected) > -1
+                  : _vm.isSelected,
               },
-              _vm.checkOrUncheck,
-            ],
-          },
-        }),
-      ]),
+              on: {
+                change: [
+                  function ($event) {
+                    var $$a = _vm.isSelected,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = _vm.question.isSelected,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && (_vm.isSelected = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.isSelected = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.isSelected = $$c
+                    }
+                  },
+                  _vm.checkOrUncheck,
+                ],
+              },
+            }),
+          ])
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "h5",
