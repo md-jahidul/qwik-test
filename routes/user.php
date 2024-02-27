@@ -43,11 +43,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/learn-practice', [PracticeDashboardController::class, 'learn'])->name('learn_practice');
     Route::get('/learn-practice/{category:slug}/{section}', [PracticeDashboardController::class, 'learnSection'])->name('learn_practice_section');
 
-    Route::get('/quizzes', [QuizDashboardController::class, 'quiz'])->name('quiz_dashboard');
-    Route::get('/quizzes/{type:slug}', [QuizDashboardController::class, 'quizzesByType'])->name('quizzes_by_type');
-    Route::get('/fetch-quizzes-by/{type:slug}', [QuizDashboardController::class, 'fetchQuizzesByType'])->name('fetch_quizzes_by_type');
-    Route::get('/live-quizzes', [QuizDashboardController::class, 'liveQuizzes'])->name('live_quizzes');
-    Route::get('/fetch-live-quizzes', [QuizDashboardController::class, 'fetchLiveQuizzes'])->name('fetch_live_quizzes');
+    //    Route::get('/quizzes', [QuizDashboardController::class, 'quiz'])->name('quiz_dashboard');
+    //    Route::get('/quizzes/{type:slug}', [QuizDashboardController::class, 'quizzesByType'])->name('quizzes_by_type');
+    //    Route::get('/fetch-quizzes-by/{type:slug}', [QuizDashboardController::class, 'fetchQuizzesByType'])->name('fetch_quizzes_by_type');
+    //    Route::get('/live-quizzes', [QuizDashboardController::class, 'liveQuizzes'])->name('live_quizzes');
+    //    Route::get('/fetch-live-quizzes', [QuizDashboardController::class, 'fetchLiveQuizzes'])->name('fetch_live_quizzes');
 
     Route::get('/exams', [ExamDashboardController::class, 'exam'])->name('exam_dashboard');
     Route::get('/exams/{type:slug}', [ExamDashboardController::class, 'examsByType'])->name('exams_by_type');
@@ -164,5 +164,5 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/my-progress', [ProgressController::class, 'myProgress'])->name('my_progress');
     Route::get('/my-practice', [ProgressController::class, 'myPractice'])->name('my_practice');
     Route::get('/my-exams', [ProgressController::class, 'myExams'])->name('my_exams');
-    Route::get('/my-quizzes', [ProgressController::class, 'myQuizzes'])->name('my_quizzes');
+    //    Route::get('/my-quizzes', [ProgressController::class, 'myQuizzes'])->name('my_quizzes');
 });

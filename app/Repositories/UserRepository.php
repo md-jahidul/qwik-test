@@ -32,12 +32,12 @@ class UserRepository
                 'url' => route('my_exams'),
                 'active' => $active == 'my_exams'
             ],
-            [
-                'key' => 'my_quizzes',
-                'title' => __('My Quiz Attempts'),
-                'url' => route('my_quizzes'),
-                'active' => $active == 'my_quizzes'
-            ],
+            //  [
+            //      'key' => 'my_quizzes',
+            //      'title' => __('My Quiz Attempts'),
+            //      'url' => route('my_quizzes'),
+            //      'active' => $active == 'my_quizzes'
+            //  ],
             [
                 'key' => 'my_practice',
                 'title' => __('My Practice Sessions'),
