@@ -1,6 +1,6 @@
 <template>
     <div class="bg-white shadow px-4 py-5 border-b-4 border-gray-800 mb-6">
-        <div class="p-field-radiobutton items-center mb-2" v-if="!qEditFlag">
+        <div class="p-field-radiobutton items-center mb-2">
             <input type="checkbox" v-model="isSelected"
                    :id="'q_id'+1" name="q_id" :value="question.isSelected"
                    @change="checkOrUncheck"
@@ -55,8 +55,7 @@
         components: {Checkbox},
         props: {
             question: Object,
-            selected: Boolean,
-            qEditFlag: Boolean
+            selected: Boolean
         },
         watch: {
             selected: {

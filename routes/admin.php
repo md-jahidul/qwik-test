@@ -139,6 +139,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->group(function
     Route::get('/exams/{exam}/{section}/fetch-questions', [ExamQuestionController::class, 'fetchQuestions'])->name('exams.fetch_questions');
     Route::get('/exams/{exam}/{section}/fetch-available-questions', [ExamQuestionController::class, 'fetchAvailableQuestions'])->name('exams.fetch_available_questions');
     Route::post('/exams/{exam}/{section}/add-question', [ExamQuestionController::class, 'addQuestion'])->name('exams.add_question');
+    Route::post('/exams/{exam}/{section}/add-selected-question', [ExamQuestionController::class, 'addSelectedQuestion'])->name('exams.add_selected_question');
     Route::post('/exams/{exam}/{section}/remove-question', [ExamQuestionController::class, 'removeQuestion'])->name('exams.remove_question');
     Route::post('/exams/{exam}/{section}/remove-selected-question', [ExamQuestionController::class, 'removeSelectedQuestion'])->name('exams.remove_selected_question');
 

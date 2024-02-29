@@ -492,8 +492,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     question: Object,
-    selected: Boolean,
-    qEditFlag: Boolean
+    selected: Boolean
   },
   watch: {
     selected: {
@@ -1722,6 +1721,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 
@@ -1806,50 +1808,10 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    removeAll: function removeAll() {
-      var _this2 = this;
-      var questionIds = [];
-      this.questions.map(function (item, index) {
-        if (item.isSelected) {
-          questionIds.push(item.id);
-        }
-      });
-      var _this = this;
-      this.$confirm.require({
-        header: this.__('Confirm'),
-        message: this.__('Do you want to remove selected question?'),
-        icon: 'pi pi-info-circle',
-        acceptClass: 'p-button-danger',
-        rejectLabel: this.__('Cancel'),
-        acceptLabel: this.__('Remove'),
-        accept: function accept() {
-          _this.processing = true;
-          axios.post(route('exams.remove_selected_question', {
-            exam: _this2.exam.id,
-            section: _this2.currentSection.id
-          }), {
-            question_ids: questionIds
-          }).then(function (response) {
-            _this.questions.map(function (item, index) {
-              if (item.isSelected) {
-                _this.questions[index].disabled = true;
-              }
-            });
-            _this.showToast('Removed', 'Selected question removed successfully');
-            _this.processing = false;
-          })["catch"](function (error) {
-            _this.processing = false;
-          });
-        },
-        reject: function reject() {
-          _this.processing = false;
-        }
-      });
-    },
     checkAll: function checkAll() {
-      var _this3 = this;
+      var _this2 = this;
       this.questions.map(function (item) {
-        return item.isSelected = _this3.selectAll;
+        return item.isSelected = _this2.selectAll;
       });
     },
     changeSingleItem: function changeSingleItem(question, isSelected) {
@@ -1971,8 +1933,34 @@ __webpack_require__.r(__webpack_exports__);
         _this.processing = false;
       });
     },
+    addQuestionAll: function addQuestionAll() {
+      var questionIds = [];
+      this.questions.map(function (item, index) {
+        if (item.isSelected) {
+          questionIds.push(item.id);
+        }
+      });
+      var _this = this;
+      _this.processing = true;
+      axios.post(route('exams.add_selected_question', {
+        exam: this.exam.id,
+        section: this.currentSection.id
+      }), {
+        question_ids: questionIds
+      }).then(function (response) {
+        _this.questions.map(function (item, index) {
+          if (item.isSelected) {
+            _this.questions[index].disabled = true;
+          }
+        });
+        _this.showToast('Added', 'Selected all lesson added successfully');
+        _this.processing = false;
+      })["catch"](function (error) {
+        _this.processing = false;
+      });
+    },
     removeQuestion: function removeQuestion(questionId, index) {
-      var _this4 = this;
+      var _this3 = this;
       var _this = this;
       this.$confirm.require({
         header: this.__('Confirm'),
@@ -1984,13 +1972,53 @@ __webpack_require__.r(__webpack_exports__);
         accept: function accept() {
           _this.processing = true;
           axios.post(route('exams.remove_question', {
-            exam: _this4.exam.id,
-            section: _this4.currentSection.id
+            exam: _this3.exam.id,
+            section: _this3.currentSection.id
           }), {
             question_id: questionId
           }).then(function (response) {
             _this.questions[index].disabled = true;
             _this.showToast('Removed', 'Question removed successfully');
+            _this.processing = false;
+          })["catch"](function (error) {
+            _this.processing = false;
+          });
+        },
+        reject: function reject() {
+          _this.processing = false;
+        }
+      });
+    },
+    removeAll: function removeAll() {
+      var _this4 = this;
+      var questionIds = [];
+      this.questions.map(function (item, index) {
+        if (item.isSelected) {
+          questionIds.push(item.id);
+        }
+      });
+      var _this = this;
+      this.$confirm.require({
+        header: this.__('Confirm'),
+        message: this.__('Do you want to remove selected question?'),
+        icon: 'pi pi-info-circle',
+        acceptClass: 'p-button-danger',
+        rejectLabel: this.__('Cancel'),
+        acceptLabel: this.__('Remove'),
+        accept: function accept() {
+          _this.processing = true;
+          axios.post(route('exams.remove_selected_question', {
+            exam: _this4.exam.id,
+            section: _this4.currentSection.id
+          }), {
+            question_ids: questionIds
+          }).then(function (response) {
+            _this.questions.map(function (item, index) {
+              if (item.isSelected) {
+                _this.questions[index].disabled = true;
+              }
+            });
+            _this.showToast('Removed', 'Selected question removed successfully');
             _this.processing = false;
           })["catch"](function (error) {
             _this.processing = false;
@@ -4408,53 +4436,51 @@ var render = function () {
       staticClass: "bg-white shadow px-4 py-5 border-b-4 border-gray-800 mb-6",
     },
     [
-      !_vm.qEditFlag
-        ? _c("div", { staticClass: "p-field-radiobutton items-center mb-2" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.isSelected,
-                  expression: "isSelected",
-                },
-              ],
-              staticClass:
-                "rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50",
-              attrs: { type: "checkbox", id: "q_id" + 1, name: "q_id" },
-              domProps: {
-                value: _vm.question.isSelected,
-                checked: Array.isArray(_vm.isSelected)
-                  ? _vm._i(_vm.isSelected, _vm.question.isSelected) > -1
-                  : _vm.isSelected,
+      _c("div", { staticClass: "p-field-radiobutton items-center mb-2" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.isSelected,
+              expression: "isSelected",
+            },
+          ],
+          staticClass:
+            "rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50",
+          attrs: { type: "checkbox", id: "q_id" + 1, name: "q_id" },
+          domProps: {
+            value: _vm.question.isSelected,
+            checked: Array.isArray(_vm.isSelected)
+              ? _vm._i(_vm.isSelected, _vm.question.isSelected) > -1
+              : _vm.isSelected,
+          },
+          on: {
+            change: [
+              function ($event) {
+                var $$a = _vm.isSelected,
+                  $$el = $event.target,
+                  $$c = $$el.checked ? true : false
+                if (Array.isArray($$a)) {
+                  var $$v = _vm.question.isSelected,
+                    $$i = _vm._i($$a, $$v)
+                  if ($$el.checked) {
+                    $$i < 0 && (_vm.isSelected = $$a.concat([$$v]))
+                  } else {
+                    $$i > -1 &&
+                      (_vm.isSelected = $$a
+                        .slice(0, $$i)
+                        .concat($$a.slice($$i + 1)))
+                  }
+                } else {
+                  _vm.isSelected = $$c
+                }
               },
-              on: {
-                change: [
-                  function ($event) {
-                    var $$a = _vm.isSelected,
-                      $$el = $event.target,
-                      $$c = $$el.checked ? true : false
-                    if (Array.isArray($$a)) {
-                      var $$v = _vm.question.isSelected,
-                        $$i = _vm._i($$a, $$v)
-                      if ($$el.checked) {
-                        $$i < 0 && (_vm.isSelected = $$a.concat([$$v]))
-                      } else {
-                        $$i > -1 &&
-                          (_vm.isSelected = $$a
-                            .slice(0, $$i)
-                            .concat($$a.slice($$i + 1)))
-                      }
-                    } else {
-                      _vm.isSelected = $$c
-                    }
-                  },
-                  _vm.checkOrUncheck,
-                ],
-              },
-            }),
-          ])
-        : _vm._e(),
+              _vm.checkOrUncheck,
+            ],
+          },
+        }),
+      ]),
       _vm._v(" "),
       _c(
         "h5",
@@ -7021,38 +7047,55 @@ var render = function () {
                           1
                         )
                       : _c("div", [
-                          !_vm.qEditFlag
-                            ? _c("div", { staticClass: "text-sm mb-4" }, [
-                                _c(
-                                  "span",
-                                  { staticClass: "text-gray-500 font-normal" },
-                                  [
-                                    _vm._v(
-                                      _vm._s(_vm.pagination.total) +
-                                        " " +
-                                        _vm._s(_vm.__("items_found_message")) +
-                                        "."
-                                    ),
+                          _c(
+                            "div",
+                            { staticClass: "text-sm mb-4" },
+                            [
+                              _c(
+                                "span",
+                                { staticClass: "text-gray-500 font-normal" },
+                                [
+                                  _vm._v(
+                                    _vm._s(_vm.pagination.total) +
+                                      " " +
+                                      _vm._s(_vm.__("items_found_message")) +
+                                      "."
+                                  ),
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _vm.pagination.total
+                                ? [
+                                    _vm.qEditFlag
+                                      ? _c(
+                                          "button",
+                                          {
+                                            staticClass:
+                                              "qt-btn-sm float-right qt-btn-success",
+                                            on: { click: _vm.addQuestionAll },
+                                          },
+                                          [_vm._v(_vm._s(_vm.__("Add All")))]
+                                        )
+                                      : _c(
+                                          "button",
+                                          {
+                                            staticClass:
+                                              "qt-btn-sm float-right qt-btn-danger",
+                                            on: { click: _vm.removeAll },
+                                          },
+                                          [_vm._v(_vm._s(_vm.__("Remove All")))]
+                                        ),
                                   ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass:
-                                      "qt-btn-sm qt-btn-danger float-right",
-                                    on: { click: _vm.removeAll },
-                                  },
-                                  [_vm._v(_vm._s(_vm.__("Remove All")))]
-                                ),
-                              ])
-                            : _vm._e(),
+                                : _vm._e(),
+                            ],
+                            2
+                          ),
                           _vm._v(" "),
                           _c(
                             "div",
                             { staticClass: "grid grid-cols-1 gap-4 flex-wrap" },
                             [
-                              !_vm.qEditFlag
+                              _vm.pagination.total
                                 ? _c(
                                     "div",
                                     {
@@ -7071,7 +7114,10 @@ var render = function () {
                                         ],
                                         staticClass:
                                           "rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50",
-                                        attrs: { type: "checkbox" },
+                                        attrs: {
+                                          type: "checkbox",
+                                          id: "checkAll",
+                                        },
                                         domProps: {
                                           checked: Array.isArray(_vm.selectAll)
                                             ? _vm._i(_vm.selectAll, null) > -1
@@ -7114,6 +7160,7 @@ var render = function () {
                                         "label",
                                         {
                                           staticClass: "text-sm text-gray-800",
+                                          attrs: { for: "checkAll" },
                                         },
                                         [_vm._v(_vm._s(_vm.__("Select All")))]
                                       ),
@@ -7128,7 +7175,6 @@ var render = function () {
                                         _c("MSAPreview", {
                                           attrs: {
                                             question: question,
-                                            qEditFlag: _vm.qEditFlag,
                                             selected: _vm.selectAll,
                                           },
                                           on: {

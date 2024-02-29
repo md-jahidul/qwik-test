@@ -138,6 +138,46 @@ class ExamQuestionController extends Controller
     }
 
     /**
+     * Add question to exam section
+     *
+     * @param $exam
+     * @param $section
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function addSelectedQuestion(Exam $exam, ExamSection $section)
+    {
+        try {
+            $questionIds = request()->get('question_ids');
+            $questions = Question::with('questionType:id,code')->whereIn('id', $questionIds)->get();
+//            dd($questions);
+            foreach ($questions as $question) {
+                if(!$exam->settings->auto_evaluation) {
+                    if(!$this->questionRepository->checkAutoEvaluationEligibility($question->questionType->code)) {
+                        return response()->json([
+                            'status' => 'warning',
+                            'message' => 'This question type does not supports auto evaluation.'
+                        ], 200);
+                    }
+                }
+
+                if (!$section->questions->contains($question->id)) {
+                    $section->questions()->attach([
+                        $question->id => ['exam_id' => $exam->id]
+                    ]);
+                }
+            }
+
+            $section->updateMeta();
+            $exam->updateMeta();
+
+            return response()->json(['status' => 'success', 'message' => 'All Selected Question Added Successfully'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'Something Went Wrong']);
+        }
+    }
+
+    /**
      * Remove question from exam section
      *
      * @param $exam
