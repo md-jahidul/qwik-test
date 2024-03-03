@@ -1702,6 +1702,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1752,6 +1762,8 @@ __webpack_require__.r(__webpack_exports__);
       questions: [],
       pagination: {},
       difficultyFilter: [],
+      selectAll: false,
+      selected: [],
       typeFilter: [],
       skillFilter: null,
       sectionFilter: null,
@@ -1782,6 +1794,19 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    checkAll: function checkAll() {
+      var _this2 = this;
+      this.questions.map(function (item) {
+        return item.isSelected = _this2.selectAll;
+      });
+    },
+    changeSingleItem: function changeSingleItem(question, isSelected) {
+      this.questions.map(function (item) {
+        if (item.id == question.id) {
+          item.isSelected = isSelected;
+        }
+      });
+    },
     viewQuestions: function viewQuestions() {
       this.qEditFlag = false;
       this.resetFilters();
@@ -1819,7 +1844,8 @@ __webpack_require__.r(__webpack_exports__);
         var data = response.data.questions.data;
         _this.pagination = response.data.questions.meta.pagination;
         data.forEach(function (item) {
-          return _this.questions.push(item);
+          item.isSelected = _this.selectAll;
+          _this.questions.push(item);
         });
         _this.loading = false;
       })["catch"](function (error) {
@@ -1889,8 +1915,33 @@ __webpack_require__.r(__webpack_exports__);
         _this.processing = false;
       });
     },
+    addQuestionAll: function addQuestionAll() {
+      var questionIds = [];
+      this.questions.map(function (item, index) {
+        if (item.isSelected) {
+          questionIds.push(item.id);
+        }
+      });
+      var _this = this;
+      _this.processing = true;
+      axios.post(route('quizzes.add_selected_question', {
+        quiz: this.quiz.id
+      }), {
+        question_ids: questionIds
+      }).then(function (response) {
+        _this.questions.map(function (item, index) {
+          if (item.isSelected) {
+            _this.questions[index].disabled = true;
+          }
+        });
+        _this.showToast('Added', 'Selected all lesson added successfully');
+        _this.processing = false;
+      })["catch"](function (error) {
+        _this.processing = false;
+      });
+    },
     removeQuestion: function removeQuestion(questionId, index) {
-      var _this2 = this;
+      var _this3 = this;
       var _this = this;
       this.$confirm.require({
         header: this.__('Confirm'),
@@ -1902,12 +1953,51 @@ __webpack_require__.r(__webpack_exports__);
         accept: function accept() {
           _this.processing = true;
           axios.post(route('quizzes.remove_question', {
-            quiz: _this2.quiz.id
+            quiz: _this3.quiz.id
           }), {
             question_id: questionId
           }).then(function (response) {
             _this.questions[index].disabled = true;
             _this.showToast('Removed', 'Question removed successfully');
+            _this.processing = false;
+          })["catch"](function (error) {
+            _this.processing = false;
+          });
+        },
+        reject: function reject() {
+          _this.processing = false;
+        }
+      });
+    },
+    removeAll: function removeAll() {
+      var _this4 = this;
+      var questionIds = [];
+      this.questions.map(function (item, index) {
+        if (item.isSelected) {
+          questionIds.push(item.id);
+        }
+      });
+      var _this = this;
+      this.$confirm.require({
+        header: this.__('Confirm'),
+        message: this.__('Do you want to remove selected question?'),
+        icon: 'pi pi-info-circle',
+        acceptClass: 'p-button-danger',
+        rejectLabel: this.__('Cancel'),
+        acceptLabel: this.__('Remove'),
+        accept: function accept() {
+          _this.processing = true;
+          axios.post(route('quizzes.remove_selected_question', {
+            quiz: _this4.quiz.id
+          }), {
+            question_ids: questionIds
+          }).then(function (response) {
+            _this.questions.map(function (item, index) {
+              if (item.isSelected) {
+                _this.questions[index].disabled = true;
+              }
+            });
+            _this.showToast('Removed', 'Selected question removed successfully');
             _this.processing = false;
           })["catch"](function (error) {
             _this.processing = false;
@@ -6879,31 +6969,133 @@ var render = function () {
                       1
                     )
                   : _c("div", [
-                      _c("div", { staticClass: "text-sm mb-4" }, [
-                        _c(
-                          "span",
-                          { staticClass: "text-gray-500 font-normal" },
-                          [
-                            _vm._v(
-                              _vm._s(_vm.pagination.total) +
-                                " " +
-                                _vm._s(_vm.__("items_found_message")) +
-                                "."
-                            ),
-                          ]
-                        ),
-                      ]),
+                      _c(
+                        "div",
+                        { staticClass: "text-sm mb-4" },
+                        [
+                          _c(
+                            "span",
+                            { staticClass: "text-gray-500 font-normal" },
+                            [
+                              _vm._v(
+                                _vm._s(_vm.pagination.total) +
+                                  " " +
+                                  _vm._s(_vm.__("items_found_message")) +
+                                  "."
+                              ),
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _vm.pagination.total
+                            ? [
+                                _vm.qEditFlag
+                                  ? _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "qt-btn-sm float-right qt-btn-success",
+                                        on: { click: _vm.addQuestionAll },
+                                      },
+                                      [_vm._v(_vm._s(_vm.__("Add All")))]
+                                    )
+                                  : _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "qt-btn-sm float-right qt-btn-danger",
+                                        on: { click: _vm.removeAll },
+                                      },
+                                      [_vm._v(_vm._s(_vm.__("Remove All")))]
+                                    ),
+                              ]
+                            : _vm._e(),
+                        ],
+                        2
+                      ),
                       _vm._v(" "),
                       _c(
                         "div",
                         { staticClass: "grid grid-cols-1 gap-4 flex-wrap" },
                         [
+                          _vm.pagination.total
+                            ? _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "p-field-radiobutton items-center",
+                                },
+                                [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.selectAll,
+                                        expression: "selectAll",
+                                      },
+                                    ],
+                                    staticClass:
+                                      "rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50",
+                                    attrs: { type: "checkbox", id: "checkAll" },
+                                    domProps: {
+                                      checked: Array.isArray(_vm.selectAll)
+                                        ? _vm._i(_vm.selectAll, null) > -1
+                                        : _vm.selectAll,
+                                    },
+                                    on: {
+                                      change: [
+                                        function ($event) {
+                                          var $$a = _vm.selectAll,
+                                            $$el = $event.target,
+                                            $$c = $$el.checked ? true : false
+                                          if (Array.isArray($$a)) {
+                                            var $$v = null,
+                                              $$i = _vm._i($$a, $$v)
+                                            if ($$el.checked) {
+                                              $$i < 0 &&
+                                                (_vm.selectAll = $$a.concat([
+                                                  $$v,
+                                                ]))
+                                            } else {
+                                              $$i > -1 &&
+                                                (_vm.selectAll = $$a
+                                                  .slice(0, $$i)
+                                                  .concat($$a.slice($$i + 1)))
+                                            }
+                                          } else {
+                                            _vm.selectAll = $$c
+                                          }
+                                        },
+                                        _vm.checkAll,
+                                      ],
+                                    },
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "label",
+                                    {
+                                      staticClass: "text-sm text-gray-800",
+                                      attrs: { for: "checkAll" },
+                                    },
+                                    [_vm._v(_vm._s(_vm.__("Select All")))]
+                                  ),
+                                ]
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
                           _vm._l(_vm.questions, function (question, index) {
                             return [
                               question.question_type === "MSA"
                                 ? [
                                     _c("MSAPreview", {
-                                      attrs: { question: question },
+                                      attrs: {
+                                        question: question,
+                                        selected: _vm.selectAll,
+                                      },
+                                      on: {
+                                        "change-single-item":
+                                          _vm.changeSingleItem,
+                                      },
                                       scopedSlots: _vm._u(
                                         [
                                           {

@@ -122,6 +122,42 @@ class QuizQuestionController extends Controller
     }
 
     /**
+     * Add question to exam section
+     *
+     * @param $exam
+     * @param $section
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function addSelectedQuestion($id)
+    {
+        try {
+            $questionIds = request()->get('question_ids');
+            $questions = Question::with('questionType:id,type')->whereIn('id', $questionIds)->get();
+
+            $quiz = Quiz::select(['id', 'title', 'settings'])->findOrFail($id);
+
+            foreach ($questions as $question) {
+                if ($question->questionType->type == 'subjective') {
+                    return response()->json([
+                        'status' => 'warning',
+                        'message' => 'Can\'t add subjective type questions to quiz.'
+                    ], 200);
+                }
+                if (!$quiz->questions->contains($question->id)) {
+                    $quiz->questions()->attach($question->id, ['quiz_id' => $quiz->id]);
+                }
+            }
+
+            $quiz->updateMeta();
+
+            return response()->json(['status' => 'success', 'message' => 'Selected Question Added Successfully'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'Something Went Wrong']);
+        }
+    }
+
+    /**
      * Remove a question from quiz
      *
      * @param $id
@@ -138,6 +174,27 @@ class QuizQuestionController extends Controller
             $quiz->updateMeta();
 
             return response()->json(['status' => 'success', 'message' => 'Question Removed Successfully'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'Something Went Wrong']);
+        }
+    }
+
+    public function removeSelectedQuestion($id)
+    {
+        try {
+            $questionIds = request()->get('question_ids');
+            $questions = Question::with('questionType:id,type')->whereIn('id', $questionIds)->get();
+
+            $quiz = Quiz::select(['id', 'title', 'settings'])->findOrFail($id);
+
+            foreach ($questions as $question){
+                $quiz->questions()->detach($question->id);
+            }
+
+            $quiz->updateMeta();
+
+            return response()->json(['status' => 'success', 'message' => 'Selected Question Removed Successfully'], 200);
 
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => 'Something Went Wrong']);

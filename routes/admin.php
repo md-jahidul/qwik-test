@@ -144,6 +144,9 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->group(function
     Route::post('/exams/{exam}/{section}/remove-selected-question', [ExamQuestionController::class, 'removeSelectedQuestion'])->name('exams.remove_selected_question');
 
 
+    Route::post('/exams/{exam}/{section}/add-selected-question', [ExamQuestionController::class, 'addSelectedQuestion'])->name('exams.add_selected_question');
+    Route::post('/exams/{exam}/{section}/remove-selected-question', [ExamQuestionController::class, 'removeSelectedQuestion'])->name('exams.remove_selected_question');
+
     /*
     |--------------------------------------------------------------------------
     | Quiz Routes
@@ -168,6 +171,9 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->group(function
     Route::get('/quizzes/{quiz}/fetch-available-questions', [QuizQuestionController::class, 'fetchAvailableQuestions'])->name('quizzes.fetch_available_questions');
     Route::post('/quizzes/{quiz}/add-question', [QuizQuestionController::class, 'addQuestion'])->name('quizzes.add_question');
     Route::post('/quizzes/{quiz}/remove-question', [QuizQuestionController::class, 'removeQuestion'])->name('quizzes.remove_question');
+
+    Route::post('/quizzes/{quiz}/add-selected-question', [QuizQuestionController::class, 'addSelectedQuestion'])->name('quizzes.add_selected_question');
+    Route::post('/quizzes/{quiz}/remove-selected-question', [QuizQuestionController::class, 'removeSelectedQuestion'])->name('quizzes.remove_selected_question');
 
     /*
     |--------------------------------------------------------------------------
