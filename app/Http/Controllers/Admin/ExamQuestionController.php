@@ -149,7 +149,7 @@ class ExamQuestionController extends Controller
         try {
             $questionIds = request()->get('question_ids');
             $questions = Question::with('questionType:id,code')->whereIn('id', $questionIds)->get();
-//            dd($questions);
+
             foreach ($questions as $question) {
                 if(!$exam->settings->auto_evaluation) {
                     if(!$this->questionRepository->checkAutoEvaluationEligibility($question->questionType->code)) {

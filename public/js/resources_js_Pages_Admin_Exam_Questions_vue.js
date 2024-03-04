@@ -1724,6 +1724,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1781,6 +1791,7 @@ __webpack_require__.r(__webpack_exports__);
       selected: [],
       typeFilter: [],
       skillFilter: null,
+      sectionFilter: null,
       topicFilter: null,
       tagArray: [],
       codeFilter: '',
@@ -1835,6 +1846,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     resetFilters: function resetFilters() {
       this.codeFilter = '';
+      this.sectionFilter = '';
       this.skillFilter = '';
       this.topicFilter = '';
       this.difficultyFilter = [];
@@ -1851,6 +1863,7 @@ __webpack_require__.r(__webpack_exports__);
         params: {
           difficulty_levels: this.difficultyFilter,
           question_types: this.typeFilter,
+          section_name: this.sectionFilter,
           skill: this.skillFilter,
           topic: this.topicFilter,
           code: this.codeFilter,
@@ -1875,6 +1888,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get(route('exams.fetch_questions', {
         exam: this.exam.id,
         section: this.currentSection.id,
+        section_name: this.sectionFilter,
         difficulty_levels: this.difficultyFilter,
         question_types: this.typeFilter,
         skill: this.skillFilter,
@@ -1900,6 +1914,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get(route('exams.fetch_available_questions', {
         exam: this.exam.id,
         section: this.currentSection.section_id,
+        section_name: this.sectionFilter,
         difficulty_levels: this.difficultyFilter,
         question_types: this.typeFilter,
         skill: this.skillFilter,
@@ -6578,9 +6593,9 @@ var render = function () {
                       ]
                     ),
                     _vm._v(
-                      "\n                                " +
+                      "\n                                    " +
                         _vm._s(_vm.__("Sections")) +
-                        "\n                            "
+                        "\n                                "
                     ),
                   ]
                 ),
@@ -6698,9 +6713,9 @@ var render = function () {
                           ]
                         ),
                         _vm._v(
-                          "\n                                " +
+                          "\n                                    " +
                             _vm._s(_vm.__("Filters")) +
-                            "\n                            "
+                            "\n                                "
                         ),
                       ]
                     ),
@@ -6828,151 +6843,30 @@ var render = function () {
                           "label",
                           {
                             staticClass:
-                              "mb-3 text-sm font-semibold text-gray-800",
-                            attrs: { for: "topic" },
+                              "pb-2 text-sm font-semibold text-gray-800",
+                            attrs: { for: "section" },
                           },
-                          [_vm._v(_vm._s(_vm.__("Topic")))]
+                          [_vm._v(_vm._s(_vm.__("Section")))]
                         ),
                         _vm._v(" "),
                         _c("InputText", {
                           attrs: {
                             type: "text",
-                            id: "topic",
-                            placeholder: "Enter Topic",
-                            "aria-describedby": "topic-help",
+                            id: "section",
+                            placeholder: "Enter Section",
+                            "aria-describedby": "section-help",
                           },
                           model: {
-                            value: _vm.topicFilter,
+                            value: _vm.sectionFilter,
                             callback: function ($$v) {
-                              _vm.topicFilter = $$v
+                              _vm.sectionFilter = $$v
                             },
-                            expression: "topicFilter",
+                            expression: "sectionFilter",
                           },
                         }),
                       ],
                       1
                     ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "w-full flex flex-col mt-6" },
-                      [
-                        _c(
-                          "label",
-                          {
-                            staticClass:
-                              "pb-2 text-sm font-semibold text-gray-800",
-                            attrs: { for: "tag" },
-                          },
-                          [_vm._v("By Tag")]
-                        ),
-                        _vm._v(" "),
-                        _c("v-select", {
-                          attrs: {
-                            multiple: "",
-                            id: "tag",
-                            options: _vm.tags,
-                            label: "name",
-                            dir: _vm.$page.props.rtl ? "rtl" : "ltr",
-                          },
-                          on: { search: _vm.searchTags },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "no-options",
-                                fn: function (ref) {
-                                  var search = ref.search
-                                  var searching = ref.searching
-                                  return [
-                                    searching
-                                      ? [
-                                          _vm._v(
-                                            _vm._s(
-                                              _vm.__(
-                                                "No results were found for this search"
-                                              )
-                                            ) + "."
-                                          ),
-                                        ]
-                                      : _c(
-                                          "em",
-                                          { staticClass: "opacity-50" },
-                                          [
-                                            _vm._v(
-                                              _vm._s(
-                                                _vm.__("Start typing to search")
-                                              ) + "."
-                                            ),
-                                          ]
-                                        ),
-                                  ]
-                                },
-                              },
-                            ],
-                            null,
-                            false,
-                            1403868184
-                          ),
-                          model: {
-                            value: _vm.tagArray,
-                            callback: function ($$v) {
-                              _vm.tagArray = $$v
-                            },
-                            expression: "tagArray",
-                          },
-                        }),
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "w-full flex flex-col mt-6" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass:
-                            "mb-3 text-sm font-semibold text-gray-800",
-                        },
-                        [_vm._v(_vm._s(_vm.__("Difficulty Level")))]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "flex flex-col gap-2" },
-                        _vm._l(_vm.difficultyLevels, function (difficulty) {
-                          return _c(
-                            "div",
-                            { staticClass: "p-field-radiobutton" },
-                            [
-                              _c("Checkbox", {
-                                attrs: {
-                                  id: "difficulty" + difficulty.id,
-                                  name: "difficulty",
-                                  value: difficulty.id,
-                                },
-                                model: {
-                                  value: _vm.difficultyFilter,
-                                  callback: function ($$v) {
-                                    _vm.difficultyFilter = $$v
-                                  },
-                                  expression: "difficultyFilter",
-                                },
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "label",
-                                {
-                                  staticClass: "text-sm text-gray-800",
-                                  attrs: { for: "difficulty" + difficulty.id },
-                                },
-                                [_vm._v(_vm._s(difficulty.name))]
-                              ),
-                            ],
-                            1
-                          )
-                        }),
-                        0
-                      ),
-                    ]),
                     _vm._v(" "),
                     _c(
                       "div",
@@ -7644,11 +7538,11 @@ var render = function () {
                                     },
                                     [
                                       _vm._v(
-                                        "\n                                        " +
+                                        "\n                                            " +
                                           _vm._s(
                                             _vm.__("no_more_data_message")
                                           ) +
-                                          "\n                                    "
+                                          "\n                                        "
                                       ),
                                     ]
                                   ),

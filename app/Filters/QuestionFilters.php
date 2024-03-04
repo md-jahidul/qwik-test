@@ -42,6 +42,16 @@ class QuestionFilters extends QueryFilter
         return null;
     }
 
+    public function section_name($query = '')
+    {
+        if($query !== '') {
+            return $this->builder->whereHas('section', function ($q) use ($query) {
+                $q->where('sections.name', 'like', "%{$query}%");
+            });
+        }
+        return null;
+    }
+
     public function skill($query = '')
     {
         if($query !== '') {

@@ -54,30 +54,40 @@
                                     <InputText type="text" id="skill" v-model="skillFilter"
                                                placeholder="Enter Skill" aria-describedby="skill-help"/>
                                 </div>
+
                                 <div class="w-full flex flex-col mt-6">
-                                    <label for="topic" class="mb-3 text-sm font-semibold text-gray-800">{{ __('Topic') }}</label>
-                                    <InputText type="text" id="topic" v-model="topicFilter"
-                                               placeholder="Enter Topic" aria-describedby="topic-help"/>
+                                    <label for="section" class="pb-2 text-sm font-semibold text-gray-800">{{ __('Section') }}</label>
+                                    <InputText type="text" id="section" v-model="sectionFilter"
+                                               placeholder="Enter Section" aria-describedby="section-help"/>
                                 </div>
-                                <div class="w-full flex flex-col mt-6">
-                                    <label for="tag" class="pb-2 text-sm font-semibold text-gray-800">By Tag</label>
-                                    <v-select multiple id="tag" v-model="tagArray" :options="tags" label="name"
-                                              @search="searchTags" :dir="$page.props.rtl ? 'rtl' : 'ltr'">
-                                        <template v-slot:no-options="{ search, searching }">
-                                            <template v-if="searching">{{ __('No results were found for this search') }}.</template>
-                                            <em v-else class="opacity-50">{{ __('Start typing to search') }}.</em>
-                                        </template>
-                                    </v-select>
-                                </div>
-                                <div class="w-full flex flex-col mt-6">
-                                    <label class="mb-3 text-sm font-semibold text-gray-800">{{ __('Difficulty Level') }}</label>
-                                    <div class="flex flex-col gap-2">
-                                        <div class="p-field-radiobutton" v-for="difficulty in difficultyLevels">
-                                            <Checkbox :id="'difficulty'+difficulty.id" name="difficulty" :value="difficulty.id" v-model="difficultyFilter" />
-                                            <label class="text-sm text-gray-800" :for="'difficulty'+difficulty.id">{{ difficulty.name }}</label>
-                                        </div>
-                                    </div>
-                                </div>
+
+<!--                                <div class="w-full flex flex-col mt-6">-->
+<!--                                    <label for="topic" class="mb-3 text-sm font-semibold text-gray-800">{{ __('Topic') }}</label>-->
+<!--                                    <InputText type="text" id="topic" v-model="topicFilter"-->
+<!--                                               placeholder="Enter Topic" aria-describedby="topic-help"/>-->
+<!--                                </div>-->
+
+<!--                                <div class="w-full flex flex-col mt-6">-->
+<!--                                    <label for="tag" class="pb-2 text-sm font-semibold text-gray-800">By Tag</label>-->
+<!--                                    <v-select multiple id="tag" v-model="tagArray" :options="tags" label="name"-->
+<!--                                              @search="searchTags" :dir="$page.props.rtl ? 'rtl' : 'ltr'">-->
+<!--                                        <template v-slot:no-options="{ search, searching }">-->
+<!--                                            <template v-if="searching">{{ __('No results were found for this search') }}.</template>-->
+<!--                                            <em v-else class="opacity-50">{{ __('Start typing to search') }}.</em>-->
+<!--                                        </template>-->
+<!--                                    </v-select>-->
+<!--                                </div>-->
+
+<!--                                <div class="w-full flex flex-col mt-6">-->
+<!--                                    <label class="mb-3 text-sm font-semibold text-gray-800">{{ __('Difficulty Level') }}</label>-->
+<!--                                    <div class="flex flex-col gap-2">-->
+<!--                                        <div class="p-field-radiobutton" v-for="difficulty in difficultyLevels">-->
+<!--                                            <Checkbox :id="'difficulty'+difficulty.id" name="difficulty" :value="difficulty.id" v-model="difficultyFilter" />-->
+<!--                                            <label class="text-sm text-gray-800" :for="'difficulty'+difficulty.id">{{ difficulty.name }}</label>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+
                                 <div class="w-full flex items-center gap-2 my-8">
                                     <button type="button" @click="resetFilters" class="w-full qt-btn qt-btn-primary">{{ __('Reset') }}</button>
                                     <button type="button" @click="filterQuestions" class="w-full qt-btn qt-btn-success">{{ __('Search') }}</button>
@@ -257,6 +267,7 @@
                 selected: [],
                 typeFilter: [],
                 skillFilter: null,
+                sectionFilter: null,
                 topicFilter: null,
                 tagArray: [],
                 codeFilter: '',
@@ -307,6 +318,7 @@
             },
             resetFilters() {
                 this.codeFilter = '';
+                this.sectionFilter = '';
                 this.skillFilter = '';
                 this.topicFilter = '';
                 this.difficultyFilter = [];
@@ -323,6 +335,7 @@
                     params: {
                         difficulty_levels: this.difficultyFilter,
                         question_types: this.typeFilter,
+                        section_name: this.sectionFilter,
                         skill: this.skillFilter,
                         topic: this.topicFilter,
                         code: this.codeFilter,
@@ -349,6 +362,7 @@
                 axios.get(route('exams.fetch_questions', {
                     exam: this.exam.id,
                     section: this.currentSection.id,
+                    section_name: this.sectionFilter,
                     difficulty_levels: this.difficultyFilter,
                     question_types: this.typeFilter,
                     skill: this.skillFilter,
@@ -376,6 +390,7 @@
                 axios.get(route('exams.fetch_available_questions', {
                     exam: this.exam.id,
                     section: this.currentSection.section_id,
+                    section_name: this.sectionFilter,
                     difficulty_levels: this.difficultyFilter,
                     question_types: this.typeFilter,
                     skill: this.skillFilter,
