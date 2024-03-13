@@ -129,6 +129,43 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Cards/PracticeSessionCard.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Cards/PracticeSessionCard.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: 'PracticeSessionCard',
+  props: {
+    practiceSession: Object
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Cards/PracticeSetCard.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Cards/PracticeSetCard.vue?vue&type=script&lang=js& ***!
@@ -786,6 +823,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_Cards_EmptyStudentCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/Components/Cards/EmptyStudentCard */ "./resources/js/Components/Cards/EmptyStudentCard.vue");
 /* harmony import */ var _Components_Shimmers_PracticeSetCardShimmer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Components/Shimmers/PracticeSetCardShimmer */ "./resources/js/Components/Shimmers/PracticeSetCardShimmer.vue");
 /* harmony import */ var _Components_BackButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Components/BackButton */ "./resources/js/Components/BackButton.vue");
+/* harmony import */ var _Components_Cards_PracticeSessionCard_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Components/Cards/PracticeSessionCard.vue */ "./resources/js/Components/Cards/PracticeSessionCard.vue");
 //
 //
 //
@@ -840,6 +878,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -848,6 +899,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
+    PracticeSessionCard: _Components_Cards_PracticeSessionCard_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
     AppLayout: _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__["default"],
     PracticeSetCard: _Components_Cards_PracticeSetCard__WEBPACK_IMPORTED_MODULE_1__["default"],
     EmptyStudentCard: _Components_Cards_EmptyStudentCard__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -855,6 +907,7 @@ __webpack_require__.r(__webpack_exports__);
     BackButton: _Components_BackButton__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   props: {
+    practiceSessions: Array,
     subscription: {
       type: Boolean,
       "default": false
@@ -1086,6 +1139,44 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 /* hot reload */
 if (false) { var api; }
 component.options.__file = "resources/js/Components/Cards/EmptyStudentCard.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/Components/Cards/PracticeSessionCard.vue":
+/*!***************************************************************!*\
+  !*** ./resources/js/Components/Cards/PracticeSessionCard.vue ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _PracticeSessionCard_vue_vue_type_template_id_75319af8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PracticeSessionCard.vue?vue&type=template&id=75319af8& */ "./resources/js/Components/Cards/PracticeSessionCard.vue?vue&type=template&id=75319af8&");
+/* harmony import */ var _PracticeSessionCard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PracticeSessionCard.vue?vue&type=script&lang=js& */ "./resources/js/Components/Cards/PracticeSessionCard.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _PracticeSessionCard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PracticeSessionCard_vue_vue_type_template_id_75319af8___WEBPACK_IMPORTED_MODULE_0__.render,
+  _PracticeSessionCard_vue_vue_type_template_id_75319af8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/Components/Cards/PracticeSessionCard.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -1515,6 +1606,21 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/Components/Cards/PracticeSessionCard.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/Components/Cards/PracticeSessionCard.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PracticeSessionCard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PracticeSessionCard.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Cards/PracticeSessionCard.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PracticeSessionCard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./resources/js/Components/Cards/PracticeSetCard.vue?vue&type=script&lang=js&":
 /*!************************************************************************************!*\
   !*** ./resources/js/Components/Cards/PracticeSetCard.vue?vue&type=script&lang=js& ***!
@@ -1725,6 +1831,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EmptyStudentCard_vue_vue_type_template_id_1444e0b5___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EmptyStudentCard_vue_vue_type_template_id_1444e0b5___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./EmptyStudentCard.vue?vue&type=template&id=1444e0b5& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Cards/EmptyStudentCard.vue?vue&type=template&id=1444e0b5&");
+
+
+/***/ }),
+
+/***/ "./resources/js/Components/Cards/PracticeSessionCard.vue?vue&type=template&id=75319af8&":
+/*!**********************************************************************************************!*\
+  !*** ./resources/js/Components/Cards/PracticeSessionCard.vue?vue&type=template&id=75319af8& ***!
+  \**********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PracticeSessionCard_vue_vue_type_template_id_75319af8___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PracticeSessionCard_vue_vue_type_template_id_75319af8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PracticeSessionCard_vue_vue_type_template_id_75319af8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PracticeSessionCard.vue?vue&type=template&id=75319af8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Cards/PracticeSessionCard.vue?vue&type=template&id=75319af8&");
 
 
 /***/ }),
@@ -3079,6 +3201,88 @@ var render = function () {
     ],
     2
   )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Cards/PracticeSessionCard.vue?vue&type=template&id=75319af8&":
+/*!*************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Components/Cards/PracticeSessionCard.vue?vue&type=template&id=75319af8& ***!
+  \*************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "w-full card" }, [
+    _c(
+      "div",
+      { staticClass: "card-body flex flex-col justify-between items-start" },
+      [
+        _c(
+          "div",
+          {
+            staticClass:
+              "flex items-center justify-center bg-green-100 rounded mb-1",
+          },
+          [
+            _c(
+              "p",
+              {
+                staticClass:
+                  "font-mono text-xs leading-loose text-center text-green-700 px-2",
+              },
+              [_vm._v(_vm._s(_vm.practiceSession.skill))]
+            ),
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "h1",
+          { staticClass: "text-lg font-semibold text-gray-800 leading-5 py-2" },
+          [_vm._v(_vm._s(_vm.practiceSession.title))]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "w-full bg-gray-300 h-1 mr-1 relative rounded mt-4" },
+          [
+            _c("div", {
+              staticClass: "h-1 bg-green-700 rounded",
+              style: "width: " + _vm.practiceSession.percentage_completed + "%",
+            }),
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "w-full flex items-end justify-between mt-4" },
+          [
+            _c("h2", { staticClass: "font-mono text-gray-600 text-sm" }, [
+              _vm._v(
+                _vm._s(_vm.practiceSession.percentage_completed) +
+                  "% " +
+                  _vm._s(_vm.__("Completed"))
+              ),
+            ]),
+            _vm._v(" "),
+            _vm._t("action"),
+          ],
+          2
+        ),
+      ]
+    ),
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -4761,6 +4965,67 @@ var render = function () {
                     ],
                     2
                   ),
+              _vm._v(" "),
+              _vm.practiceSessions.length > 0
+                ? _c(
+                    "div",
+                    { staticClass: "grid grid-cols-1 mb-6" },
+                    [
+                      _vm._l(
+                        _vm.practiceSessions,
+                        function (practiceSession, index) {
+                          return [
+                            _c("practice-session-card", {
+                              attrs: { "practice-session": practiceSession },
+                              scopedSlots: _vm._u(
+                                [
+                                  {
+                                    key: "action",
+                                    fn: function () {
+                                      return [
+                                        _c(
+                                          "inertia-link",
+                                          {
+                                            attrs: {
+                                              href: _vm.route(
+                                                "init_practice_set",
+                                                { slug: practiceSession.slug }
+                                              ),
+                                            },
+                                          },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass:
+                                                  "qt-btn qt-btn-sm qt-btn-primary",
+                                              },
+                                              [
+                                                _vm._v(
+                                                  _vm._s(
+                                                    _vm.__("Resume Practice")
+                                                  )
+                                                ),
+                                              ]
+                                            ),
+                                          ]
+                                        ),
+                                      ]
+                                    },
+                                    proxy: true,
+                                  },
+                                ],
+                                null,
+                                true
+                              ),
+                            }),
+                          ]
+                        }
+                      ),
+                    ],
+                    2
+                  )
+                : _vm._e(),
               _vm._v(" "),
               !_vm.loading && _vm.practiceSets.length === 0
                 ? _c(

@@ -19,9 +19,11 @@ use App\Models\SubCategory;
 use App\Repositories\QuestionRepository;
 use App\Repositories\UserPracticeSetRepository;
 use App\Transformers\Platform\PracticeQuestionTransformer;
+use App\Transformers\Platform\PracticeSessionCardTransformer;
 use App\Transformers\Platform\PracticeSetCardTransformer;
 use App\Transformers\Platform\PracticeSolutionTransformer;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
@@ -89,8 +91,20 @@ class PracticeController extends Controller
     public function qbankList()
     {
         $category = auth()->user()->selectedSyllabus();
+
+        // Fetch current user in-completed practice sessions
+        $practiceSessions = PracticeSession::with(['practiceSet' => function($query) {
+            $query->with('skill:id,name');
+        }])->whereHas('practiceSet', function (Builder $query) use ($category) {
+            $query->where('sub_category_id', $category->id);
+        })->where('user_id', auth()->user()->id)->pending()
+            ->orderBy('updated_at', 'desc')->limit(1)->get();
+
+//        dd($practiceSessions);
+
         return Inertia::render('User/QBankDashboard', [
-            'subscription' => request()->user()->hasActiveSubscription($category->id, 'practice_sets')
+            'subscription' => request()->user()->hasActiveSubscription($category->id, 'practice_sets'),
+            'practiceSessions' => fractal($practiceSessions, new PracticeSessionCardTransformer())->toArray()['data'],
         ]);
     }
 
@@ -107,7 +121,7 @@ class PracticeController extends Controller
             ->toArray();
 
         return response()->json([
-            'sets' => $practiceSets
+            'sets' => $practiceSets,
         ], 200);
     }
 

@@ -37,6 +37,18 @@
                             </practice-set-card>
                         </template>
                     </div>
+                    <div v-if="practiceSessions.length > 0" class="grid grid-cols-1 mb-6">
+                        <template v-for="(practiceSession, index) in practiceSessions">
+
+                            <practice-session-card :practice-session="practiceSession">
+                                <template #action>
+                                    <inertia-link :href="route('init_practice_set', {slug: practiceSession.slug})">
+                                        <span class="qt-btn qt-btn-sm qt-btn-primary">{{ __('Resume Practice') }}</span>
+                                    </inertia-link>
+                                </template>
+                            </practice-session-card>
+                        </template>
+                    </div>
                     <div class="mb-6" v-if="!loading && practiceSets.length === 0" >
                         <empty-student-card :title="'No practice tests found in this Skill'"></empty-student-card>
                     </div>
@@ -58,8 +70,10 @@ import PracticeSetCard from "@/Components/Cards/PracticeSetCard";
 import EmptyStudentCard from "@/Components/Cards/EmptyStudentCard";
 import PracticeSetCardShimmer from "@/Components/Shimmers/PracticeSetCardShimmer";
 import BackButton from "@/Components/BackButton";
+import PracticeSessionCard from "@/Components/Cards/PracticeSessionCard.vue";
 export default {
     components: {
+        PracticeSessionCard,
         AppLayout,
         PracticeSetCard,
         EmptyStudentCard,
@@ -67,6 +81,7 @@ export default {
         BackButton
     },
     props: {
+        practiceSessions: Array,
         subscription: {
             type: Boolean,
             default: false,
