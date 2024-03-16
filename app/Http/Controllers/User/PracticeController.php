@@ -100,7 +100,6 @@ class PracticeController extends Controller
         })->where('user_id', auth()->user()->id)->pending()
             ->orderBy('updated_at', 'desc')->limit(1)->get();
 
-//        dd($practiceSessions);
 
         return Inertia::render('User/QBankDashboard', [
             'subscription' => request()->user()->hasActiveSubscription($category->id, 'practice_sets'),

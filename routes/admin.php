@@ -190,6 +190,9 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->group(function
     Route::post('/practice-sets/{practice_set}/add-question', [PracticeSetQuestionController::class, 'addQuestion'])->name('practice-sets.add_question');
     Route::post('/practice-sets/{practice_set}/remove-question', [PracticeSetQuestionController::class, 'removeQuestion'])->name('practice-sets.remove_question');
 
+    Route::post('/practice-sets/{practice_set}/add-selected-question', [PracticeSetQuestionController::class, 'addSelectedQuestion'])->name('practice-sets.add_selected_question');
+    Route::post('/practice-sets/{practice_set}/remove-selected-question', [PracticeSetQuestionController::class, 'removeSelectedQuestion'])->name('practice-sets.remove_selected_question');
+
     Route::get('practice-sets/{practice_set}/overall-report', [PracticeAnalyticsController::class, 'overallReport'])->name('practice-sets.overall_report');
     Route::get('practice-sets/{practice_set}/detailed-report', [PracticeAnalyticsController::class, 'detailedReport'])->name('practice-sets.detailed_report');
     Route::get('practice-sets/{practice_set}/export-report', [PracticeAnalyticsController::class, 'exportReport'])->name('practice-sets.export_report');

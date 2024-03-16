@@ -122,6 +122,42 @@ class PracticeSetQuestionController extends Controller
     }
 
     /**
+     * Add question to exam section
+     *
+     * @param $exam
+     * @param $section
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function addSelectedQuestion($id)
+    {
+        try {
+            $questionIds = request()->get('question_ids');
+            $questions = Question::with('questionType:id,code')->whereIn('id', $questionIds)->get();
+            $set = PracticeSet::select(['id', 'title'])->findOrFail($id);
+
+            foreach ($questions as $question) {
+                if($question->questionType->type == 'subjective') {
+                    return response()->json([
+                        'status' => 'warning',
+                        'message' => 'Can\'t add subjective type questions to practice set.'
+                    ], 200);
+                }
+
+                if (!$set->questions->contains($question->id)) {
+                    $set->questions()->attach($question->id, ['practice_set_id' => $set->id]);
+                    $set->total_questions = $set->questions()->count();
+
+                    $set->update();
+                }
+            }
+
+            return response()->json(['status' => 'success', 'message' => 'All Selected Question Added Successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'Something Went Wrong']);
+        }
+    }
+
+    /**
      * Remove a question from practice set
      *
      * @param $id
@@ -141,6 +177,24 @@ class PracticeSetQuestionController extends Controller
 
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => 'Something Went Wrong']);
+        }
+    }
+
+    public function removeSelectedQuestion($id)
+    {
+        try {
+            $questions = Question::with('questionType:id,type')->whereIn('id', request()->get('question_ids'))->get('id');
+            $set = PracticeSet::select(['id', 'title'])->findOrFail($id);
+
+            foreach ($questions as $question){
+                $set->questions()->detach($question->id);
+                $set->total_questions = $set->questions()->count();
+                $set->update();
+            }
+
+            return response()->json(['status' => 'success', 'message' => 'Question Removed Successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e]);
         }
     }
 }

@@ -1775,6 +1775,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1824,7 +1838,10 @@ __webpack_require__.r(__webpack_exports__);
       qEditFlag: false,
       questions: [],
       difficultyFilter: [],
+      selectAll: false,
+      selected: [],
       typeFilter: [],
+      sectionFilter: null,
       tagArray: [],
       codeFilter: '',
       tags: [],
@@ -1853,16 +1870,32 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    checkAll: function checkAll() {
+      var _this2 = this;
+      this.questions.map(function (item) {
+        return item.isSelected = _this2.selectAll;
+      });
+    },
+    changeSingleItem: function changeSingleItem(question, isSelected) {
+      this.questions.map(function (item) {
+        if (item.id == question.id) {
+          item.isSelected = isSelected;
+        }
+      });
+    },
     viewQuestions: function viewQuestions() {
+      this.selectAll = false;
       this.qEditFlag = false;
       this.resetFilters();
     },
     editQuestions: function editQuestions() {
+      this.selectAll = false;
       this.qEditFlag = true;
       this.resetFilters();
     },
     resetFilters: function resetFilters() {
       this.codeFilter = '';
+      this.sectionFilter = '';
       this.topicFilter = '';
       this.difficultyFilter = [];
       this.typeFilter = [];
@@ -1878,6 +1911,7 @@ __webpack_require__.r(__webpack_exports__);
         params: {
           difficulty_levels: this.difficultyFilter,
           question_types: this.typeFilter,
+          section: this.sectionFilter,
           code: this.codeFilter,
           topic: this.topicFilter,
           tags: this.tagFilter
@@ -1886,7 +1920,8 @@ __webpack_require__.r(__webpack_exports__);
         var data = response.data.questions.data;
         _this.pagination = response.data.questions.meta.pagination;
         data.forEach(function (item) {
-          return _this.questions.push(item);
+          item.isSelected = _this.selectAll;
+          _this.questions.push(item);
         });
         _this.loading = false;
       })["catch"](function (error) {
@@ -1901,6 +1936,7 @@ __webpack_require__.r(__webpack_exports__);
         practice_set: this.practiceSet.id,
         difficulty_levels: this.difficultyFilter,
         question_types: this.typeFilter,
+        section: this.sectionFilter,
         code: this.codeFilter,
         topic: this.topicFilter,
         tags: this.tagFilter
@@ -1923,6 +1959,7 @@ __webpack_require__.r(__webpack_exports__);
         practice_set: this.practiceSet.id,
         difficulty_levels: this.difficultyFilter,
         question_types: this.typeFilter,
+        section: this.sectionFilter,
         code: this.codeFilter,
         topic: this.topicFilter,
         tags: this.tagFilter
@@ -1952,8 +1989,33 @@ __webpack_require__.r(__webpack_exports__);
         _this.processing = false;
       });
     },
+    addQuestionAll: function addQuestionAll() {
+      var questionIds = [];
+      this.questions.map(function (item, index) {
+        if (item.isSelected) {
+          questionIds.push(item.id);
+        }
+      });
+      var _this = this;
+      _this.processing = true;
+      axios.post(route('practice-sets.add_selected_question', {
+        practice_set: this.practiceSet.id
+      }), {
+        question_ids: questionIds
+      }).then(function (response) {
+        _this.questions.map(function (item, index) {
+          if (item.isSelected) {
+            _this.questions[index].disabled = true;
+          }
+        });
+        _this.showToast('Added', 'Selected all lesson added successfully');
+        _this.processing = false;
+      })["catch"](function (error) {
+        _this.processing = false;
+      });
+    },
     removeQuestion: function removeQuestion(questionId, index) {
-      var _this2 = this;
+      var _this3 = this;
       var _this = this;
       _this.processing = true;
       this.$confirm.require({
@@ -1965,7 +2027,7 @@ __webpack_require__.r(__webpack_exports__);
         acceptLabel: this.__('Remove'),
         accept: function accept() {
           axios.post(route('practice-sets.remove_question', {
-            practice_set: _this2.practiceSet.id
+            practice_set: _this3.practiceSet.id
           }), {
             question_id: questionId
           }).then(function (response) {
@@ -1977,6 +2039,45 @@ __webpack_require__.r(__webpack_exports__);
           });
         },
         reject: function reject() {}
+      });
+    },
+    removeAll: function removeAll() {
+      var _this4 = this;
+      var questionIds = [];
+      this.questions.map(function (item, index) {
+        if (item.isSelected) {
+          questionIds.push(item.id);
+        }
+      });
+      var _this = this;
+      this.$confirm.require({
+        header: this.__('Confirm'),
+        message: this.__('Do you want to remove selected question?'),
+        icon: 'pi pi-info-circle',
+        acceptClass: 'p-button-danger',
+        rejectLabel: this.__('Cancel'),
+        acceptLabel: this.__('Remove'),
+        accept: function accept() {
+          _this.processing = true;
+          axios.post(route('practice-sets.remove_selected_question', {
+            practice_set: _this4.practiceSet.id
+          }), {
+            question_ids: questionIds
+          }).then(function (response) {
+            _this.questions.map(function (item, index) {
+              if (item.isSelected) {
+                _this.questions[index].disabled = true;
+              }
+            });
+            _this.showToast('Removed', 'Selected question removed successfully');
+            _this.processing = false;
+          })["catch"](function (error) {
+            _this.processing = false;
+          });
+        },
+        reject: function reject() {
+          _this.processing = false;
+        }
       });
     },
     searchTags: function searchTags(search, loading) {
@@ -6631,9 +6732,9 @@ var render = function () {
                       ]
                     ),
                     _vm._v(
-                      "\n                                " +
+                      "\n                                    " +
                         _vm._s(_vm.__("Filters")) +
-                        "\n                            "
+                        "\n                                "
                     ),
                   ]
                 ),
@@ -6723,137 +6824,30 @@ var render = function () {
                     _c(
                       "label",
                       {
-                        staticClass: "mb-3 text-sm font-semibold text-gray-800",
-                        attrs: { for: "topic" },
+                        staticClass: "pb-2 text-sm font-semibold text-gray-800",
+                        attrs: { for: "section" },
                       },
-                      [_vm._v(_vm._s(_vm.__("Topic")))]
+                      [_vm._v(_vm._s(_vm.__("Section")))]
                     ),
                     _vm._v(" "),
                     _c("InputText", {
                       attrs: {
                         type: "text",
-                        id: "topic",
-                        placeholder: _vm.__("Topic"),
-                        "aria-describedby": "topic-help",
+                        id: "section",
+                        placeholder: "Enter Section",
+                        "aria-describedby": "section-help",
                       },
                       model: {
-                        value: _vm.topicFilter,
+                        value: _vm.sectionFilter,
                         callback: function ($$v) {
-                          _vm.topicFilter = $$v
+                          _vm.sectionFilter = $$v
                         },
-                        expression: "topicFilter",
+                        expression: "sectionFilter",
                       },
                     }),
                   ],
                   1
                 ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "w-full flex flex-col mt-6" },
-                  [
-                    _c(
-                      "label",
-                      {
-                        staticClass: "pb-2 text-sm font-semibold text-gray-800",
-                        attrs: { for: "tag" },
-                      },
-                      [_vm._v("By Tag")]
-                    ),
-                    _vm._v(" "),
-                    _c("v-select", {
-                      attrs: {
-                        multiple: "",
-                        id: "tag",
-                        options: _vm.tags,
-                        label: "name",
-                        dir: _vm.$page.props.rtl ? "rtl" : "ltr",
-                      },
-                      on: { search: _vm.searchTags },
-                      scopedSlots: _vm._u([
-                        {
-                          key: "no-options",
-                          fn: function (ref) {
-                            var search = ref.search
-                            var searching = ref.searching
-                            return [
-                              searching
-                                ? [
-                                    _vm._v(
-                                      _vm._s(
-                                        _vm.__(
-                                          "No results were found for this search"
-                                        )
-                                      ) + "."
-                                    ),
-                                  ]
-                                : _c("em", { staticClass: "opacity-50" }, [
-                                    _vm._v(
-                                      _vm._s(_vm.__("Start typing to search")) +
-                                        "."
-                                    ),
-                                  ]),
-                            ]
-                          },
-                        },
-                      ]),
-                      model: {
-                        value: _vm.tagArray,
-                        callback: function ($$v) {
-                          _vm.tagArray = $$v
-                        },
-                        expression: "tagArray",
-                      },
-                    }),
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "w-full flex flex-col mt-6" }, [
-                  _c(
-                    "label",
-                    { staticClass: "mb-3 text-sm font-semibold text-gray-800" },
-                    [_vm._v(_vm._s(_vm.__("Difficulty Level")))]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "flex flex-col gap-2" },
-                    _vm._l(_vm.difficultyLevels, function (difficulty) {
-                      return _c(
-                        "div",
-                        { staticClass: "p-field-radiobutton" },
-                        [
-                          _c("Checkbox", {
-                            attrs: {
-                              id: "difficulty" + difficulty.id,
-                              name: "difficulty",
-                              value: difficulty.id,
-                            },
-                            model: {
-                              value: _vm.difficultyFilter,
-                              callback: function ($$v) {
-                                _vm.difficultyFilter = $$v
-                              },
-                              expression: "difficultyFilter",
-                            },
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "label",
-                            {
-                              staticClass: "text-sm text-gray-800",
-                              attrs: { for: "difficulty" + difficulty.id },
-                            },
-                            [_vm._v(_vm._s(difficulty.name))]
-                          ),
-                        ],
-                        1
-                      )
-                    }),
-                    0
-                  ),
-                ]),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -6976,31 +6970,133 @@ var render = function () {
                       1
                     )
                   : _c("div", [
-                      _c("div", { staticClass: "text-sm mb-4" }, [
-                        _c(
-                          "span",
-                          { staticClass: "text-gray-500 font-normal" },
-                          [
-                            _vm._v(
-                              _vm._s(_vm.pagination.total) +
-                                " " +
-                                _vm._s(_vm.__("items_found_message")) +
-                                "."
-                            ),
-                          ]
-                        ),
-                      ]),
+                      _c(
+                        "div",
+                        { staticClass: "text-sm mb-4" },
+                        [
+                          _c(
+                            "span",
+                            { staticClass: "text-gray-500 font-normal" },
+                            [
+                              _vm._v(
+                                _vm._s(_vm.pagination.total) +
+                                  " " +
+                                  _vm._s(_vm.__("items_found_message")) +
+                                  "."
+                              ),
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _vm.pagination.total
+                            ? [
+                                _vm.qEditFlag
+                                  ? _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "qt-btn-sm float-right qt-btn-success",
+                                        on: { click: _vm.addQuestionAll },
+                                      },
+                                      [_vm._v(_vm._s(_vm.__("Add All")))]
+                                    )
+                                  : _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "qt-btn-sm float-right qt-btn-danger",
+                                        on: { click: _vm.removeAll },
+                                      },
+                                      [_vm._v(_vm._s(_vm.__("Remove All")))]
+                                    ),
+                              ]
+                            : _vm._e(),
+                        ],
+                        2
+                      ),
                       _vm._v(" "),
                       _c(
                         "div",
                         { staticClass: "grid grid-cols-1 gap-4 flex-wrap" },
                         [
+                          _vm.pagination.total
+                            ? _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "p-field-radiobutton items-center",
+                                },
+                                [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.selectAll,
+                                        expression: "selectAll",
+                                      },
+                                    ],
+                                    staticClass:
+                                      "rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50",
+                                    attrs: { type: "checkbox", id: "checkAll" },
+                                    domProps: {
+                                      checked: Array.isArray(_vm.selectAll)
+                                        ? _vm._i(_vm.selectAll, null) > -1
+                                        : _vm.selectAll,
+                                    },
+                                    on: {
+                                      change: [
+                                        function ($event) {
+                                          var $$a = _vm.selectAll,
+                                            $$el = $event.target,
+                                            $$c = $$el.checked ? true : false
+                                          if (Array.isArray($$a)) {
+                                            var $$v = null,
+                                              $$i = _vm._i($$a, $$v)
+                                            if ($$el.checked) {
+                                              $$i < 0 &&
+                                                (_vm.selectAll = $$a.concat([
+                                                  $$v,
+                                                ]))
+                                            } else {
+                                              $$i > -1 &&
+                                                (_vm.selectAll = $$a
+                                                  .slice(0, $$i)
+                                                  .concat($$a.slice($$i + 1)))
+                                            }
+                                          } else {
+                                            _vm.selectAll = $$c
+                                          }
+                                        },
+                                        _vm.checkAll,
+                                      ],
+                                    },
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "label",
+                                    {
+                                      staticClass: "text-sm text-gray-800",
+                                      attrs: { for: "checkAll" },
+                                    },
+                                    [_vm._v(_vm._s(_vm.__("Select All")))]
+                                  ),
+                                ]
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
                           _vm._l(_vm.questions, function (question, index) {
                             return [
                               question.question_type === "MSA"
                                 ? [
                                     _c("MSAPreview", {
-                                      attrs: { question: question },
+                                      attrs: {
+                                        question: question,
+                                        selected: _vm.selectAll,
+                                      },
+                                      on: {
+                                        "change-single-item":
+                                          _vm.changeSingleItem,
+                                      },
                                       scopedSlots: _vm._u(
                                         [
                                           {
@@ -7442,9 +7538,9 @@ var render = function () {
                                 },
                                 [
                                   _vm._v(
-                                    "\n                                        " +
+                                    "\n                                            " +
                                       _vm._s(_vm.__("no_more_data_message")) +
-                                      "\n                                    "
+                                      "\n                                        "
                                   ),
                                 ]
                               ),

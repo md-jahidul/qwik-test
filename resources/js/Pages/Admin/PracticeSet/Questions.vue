@@ -34,29 +34,34 @@
                                     </div>
                                 </div>
                                 <div class="w-full flex flex-col mt-6">
-                                    <label for="topic" class="mb-3 text-sm font-semibold text-gray-800">{{ __('Topic') }}</label>
-                                    <InputText type="text" id="topic" v-model="topicFilter"
-                                               :placeholder="__('Topic')" aria-describedby="topic-help"/>
+                                    <label for="section" class="pb-2 text-sm font-semibold text-gray-800">{{ __('Section') }}</label>
+                                    <InputText type="text" id="section" v-model="sectionFilter"
+                                               placeholder="Enter Section" aria-describedby="section-help"/>
                                 </div>
-                                <div class="w-full flex flex-col mt-6">
-                                    <label for="tag" class="pb-2 text-sm font-semibold text-gray-800">By Tag</label>
-                                    <v-select multiple id="tag" v-model="tagArray" :options="tags" label="name"
-                                              @search="searchTags" :dir="$page.props.rtl ? 'rtl' : 'ltr'">
-                                        <template v-slot:no-options="{ search, searching }">
-                                            <template v-if="searching">{{ __('No results were found for this search') }}.</template>
-                                            <em v-else class="opacity-50">{{ __('Start typing to search') }}.</em>
-                                        </template>
-                                    </v-select>
-                                </div>
-                                <div class="w-full flex flex-col mt-6">
-                                    <label class="mb-3 text-sm font-semibold text-gray-800">{{ __('Difficulty Level') }}</label>
-                                    <div class="flex flex-col gap-2">
-                                        <div class="p-field-radiobutton" v-for="difficulty in difficultyLevels">
-                                            <Checkbox :id="'difficulty'+difficulty.id" name="difficulty" :value="difficulty.id" v-model="difficultyFilter" />
-                                            <label class="text-sm text-gray-800" :for="'difficulty'+difficulty.id">{{ difficulty.name }}</label>
-                                        </div>
-                                    </div>
-                                </div>
+<!--                                <div class="w-full flex flex-col mt-6">-->
+<!--                                    <label for="topic" class="mb-3 text-sm font-semibold text-gray-800">{{ __('Topic') }}</label>-->
+<!--                                    <InputText type="text" id="topic" v-model="topicFilter"-->
+<!--                                               :placeholder="__('Topic')" aria-describedby="topic-help"/>-->
+<!--                                </div>-->
+<!--                                <div class="w-full flex flex-col mt-6">-->
+<!--                                    <label for="tag" class="pb-2 text-sm font-semibold text-gray-800">By Tag</label>-->
+<!--                                    <v-select multiple id="tag" v-model="tagArray" :options="tags" label="name"-->
+<!--                                              @search="searchTags" :dir="$page.props.rtl ? 'rtl' : 'ltr'">-->
+<!--                                        <template v-slot:no-options="{ search, searching }">-->
+<!--                                            <template v-if="searching">{{ __('No results were found for this search') }}.</template>-->
+<!--                                            <em v-else class="opacity-50">{{ __('Start typing to search') }}.</em>-->
+<!--                                        </template>-->
+<!--                                    </v-select>-->
+<!--                                </div>-->
+<!--                                <div class="w-full flex flex-col mt-6">-->
+<!--                                    <label class="mb-3 text-sm font-semibold text-gray-800">{{ __('Difficulty Level') }}</label>-->
+<!--                                    <div class="flex flex-col gap-2">-->
+<!--                                        <div class="p-field-radiobutton" v-for="difficulty in difficultyLevels">-->
+<!--                                            <Checkbox :id="'difficulty'+difficulty.id" name="difficulty" :value="difficulty.id" v-model="difficultyFilter" />-->
+<!--                                            <label class="text-sm text-gray-800" :for="'difficulty'+difficulty.id">{{ difficulty.name }}</label>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
                                 <div class="w-full flex items-center gap-2 my-8">
                                     <button type="button" @click="resetFilters" class="w-full qt-btn qt-btn-primary">{{ __('Reset') }}</button>
                                     <button type="button" @click="filterQuestions" class="w-full qt-btn qt-btn-success">{{ __('Search') }}</button>
@@ -82,11 +87,20 @@
                                 <div v-else>
                                     <div class="text-sm mb-4">
                                         <span class="text-gray-500 font-normal">{{ pagination.total }} {{ __('items_found_message') }}.</span>
+                                        <template v-if="pagination.total">
+                                            <button class="qt-btn-sm float-right qt-btn-success" v-if="qEditFlag" @click="addQuestionAll">{{ __('Add All') }}</button>
+                                            <button class="qt-btn-sm float-right qt-btn-danger" v-else @click="removeAll">{{ __('Remove All') }}</button>
+                                        </template>
                                     </div>
                                     <div class="grid grid-cols-1 gap-4 flex-wrap">
+                                        <div class="p-field-radiobutton items-center" v-if="pagination.total">
+                                            <input type="checkbox" id="checkAll" v-model="selectAll" @change="checkAll"
+                                                   class="rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+                                            <label class="text-sm text-gray-800" for="checkAll">{{ __('Select All') }}</label>
+                                        </div>
                                         <template v-for="(question, index) in questions">
                                             <template v-if="question.question_type === 'MSA'">
-                                                <MSAPreview :question="question">
+                                                <MSAPreview :question="question" :selected="selectAll" @change-single-item="changeSingleItem">
                                                     <template #action>
                                                         <button class="qt-btn-sm" @click="qEditFlag ? addQuestion(question.id, index) : removeQuestion(question.id, index)" v-html="qEditFlag ? __('Add') : __('Remove')"
                                                                 :class="[qEditFlag ? 'qt-btn-success' : 'qt-btn-danger', question.disabled || processing ? 'opacity-25': '']"
@@ -217,7 +231,10 @@
                 qEditFlag: false,
                 questions: [],
                 difficultyFilter: [],
+                selectAll: false,
+                selected: [],
                 typeFilter: [],
+                sectionFilter: null,
                 tagArray: [],
                 codeFilter: '',
                 tags: [],
@@ -245,16 +262,29 @@
             }
         },
         methods: {
+            checkAll() {
+                this.questions.map((item) => item.isSelected = this.selectAll)
+            },
+            changeSingleItem(question, isSelected){
+                this.questions.map((item) => {
+                    if (item.id == question.id) {
+                        item.isSelected = isSelected;
+                    }
+                })
+            },
             viewQuestions() {
+                this.selectAll = false;
                 this.qEditFlag = false;
                 this.resetFilters();
             },
             editQuestions() {
+                this.selectAll = false;
                 this.qEditFlag = true;
                 this.resetFilters();
             },
             resetFilters() {
                 this.codeFilter = '';
+                this.sectionFilter = '';
                 this.topicFilter = '';
                 this.difficultyFilter = [];
                 this.typeFilter = [];
@@ -270,6 +300,7 @@
                     params: {
                         difficulty_levels: this.difficultyFilter,
                         question_types: this.typeFilter,
+                        section: this.sectionFilter,
                         code: this.codeFilter,
                         topic: this.topicFilter,
                         tags: this.tagFilter
@@ -278,7 +309,10 @@
                     .then(function (response) {
                         let data = response.data.questions.data;
                         _this.pagination = response.data.questions.meta.pagination;
-                        data.forEach((item) => _this.questions.push(item));
+                        data.forEach((item) => {
+                            item.isSelected = _this.selectAll;
+                            _this.questions.push(item)
+                        });
                         _this.loading = false;
                     })
                     .catch(function (error) {
@@ -293,6 +327,7 @@
                     practice_set: this.practiceSet.id,
                     difficulty_levels: this.difficultyFilter,
                     question_types: this.typeFilter,
+                    section: this.sectionFilter,
                     code: this.codeFilter,
                     topic: this.topicFilter,
                     tags: this.tagFilter
@@ -315,6 +350,7 @@
                     practice_set: this.practiceSet.id,
                     difficulty_levels: this.difficultyFilter,
                     question_types: this.typeFilter,
+                    section: this.sectionFilter,
                     code: this.codeFilter,
                     topic: this.topicFilter,
                     tags: this.tagFilter
@@ -336,6 +372,30 @@
                     .then(function (response) {
                         _this.questions[index].disabled = true;
                         _this.showToast('Added', 'Added removed successfully');
+                        _this.processing = false;
+                    })
+                    .catch(function (error) {
+                        _this.processing = false;
+                    });
+            },
+            addQuestionAll() {
+                let questionIds = [];
+                this.questions.map((item, index) => {
+                    if (item.isSelected) {
+                        questionIds.push(item.id)
+                    }
+                })
+
+                let _this = this;
+                _this.processing = true;
+                axios.post(route('practice-sets.add_selected_question', {practice_set: this.practiceSet.id}), { question_ids: questionIds })
+                    .then(function (response) {
+                        _this.questions.map((item, index) => {
+                            if (item.isSelected) {
+                                _this.questions[index].disabled = true;
+                            }
+                        })
+                        _this.showToast('Added', 'Selected all lesson added successfully');
                         _this.processing = false;
                     })
                     .catch(function (error) {
@@ -368,6 +428,43 @@
                     }
                 });
 
+            },
+            removeAll() {
+                let questionIds = [];
+                this.questions.map((item, index) => {
+                    if (item.isSelected) {
+                        questionIds.push(item.id)
+                    }
+                })
+
+                let _this = this;
+                this.$confirm.require({
+                    header: this.__('Confirm'),
+                    message: this.__('Do you want to remove selected question?'),
+                    icon: 'pi pi-info-circle',
+                    acceptClass: 'p-button-danger',
+                    rejectLabel: this.__('Cancel'),
+                    acceptLabel: this.__('Remove'),
+                    accept: () => {
+                        _this.processing = true;
+                        axios.post(route('practice-sets.remove_selected_question', {practice_set: this.practiceSet.id}), { question_ids: questionIds })
+                            .then(function (response) {
+                                _this.questions.map((item, index) => {
+                                    if (item.isSelected) {
+                                        _this.questions[index].disabled = true;
+                                    }
+                                })
+                                _this.showToast('Removed', 'Selected question removed successfully');
+                                _this.processing = false;
+                            })
+                            .catch(function (error) {
+                                _this.processing = false;
+                            });
+                    },
+                    reject: () => {
+                        _this.processing = false;
+                    }
+                });
             },
             searchTags(search, loading) {
                 if(search !== '') {
