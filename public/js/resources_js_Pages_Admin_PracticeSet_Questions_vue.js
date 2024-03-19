@@ -6851,6 +6851,38 @@ var render = function () {
                 _vm._v(" "),
                 _c(
                   "div",
+                  { staticClass: "w-full flex flex-col mt-6" },
+                  [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "mb-3 text-sm font-semibold text-gray-800",
+                        attrs: { for: "topic" },
+                      },
+                      [_vm._v(_vm._s(_vm.__("Topic")))]
+                    ),
+                    _vm._v(" "),
+                    _c("InputText", {
+                      attrs: {
+                        type: "text",
+                        id: "topic",
+                        placeholder: _vm.__("Topic"),
+                        "aria-describedby": "topic-help",
+                      },
+                      model: {
+                        value: _vm.topicFilter,
+                        callback: function ($$v) {
+                          _vm.topicFilter = $$v
+                        },
+                        expression: "topicFilter",
+                      },
+                    }),
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
                   { staticClass: "w-full flex items-center gap-2 my-8" },
                   [
                     _c(

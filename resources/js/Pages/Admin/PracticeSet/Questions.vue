@@ -38,11 +38,11 @@
                                     <InputText type="text" id="section" v-model="sectionFilter"
                                                placeholder="Enter Section" aria-describedby="section-help"/>
                                 </div>
-<!--                                <div class="w-full flex flex-col mt-6">-->
-<!--                                    <label for="topic" class="mb-3 text-sm font-semibold text-gray-800">{{ __('Topic') }}</label>-->
-<!--                                    <InputText type="text" id="topic" v-model="topicFilter"-->
-<!--                                               :placeholder="__('Topic')" aria-describedby="topic-help"/>-->
-<!--                                </div>-->
+                                <div class="w-full flex flex-col mt-6">
+                                    <label for="topic" class="mb-3 text-sm font-semibold text-gray-800">{{ __('Topic') }}</label>
+                                    <InputText type="text" id="topic" v-model="topicFilter"
+                                               :placeholder="__('Topic')" aria-describedby="topic-help"/>
+                                </div>
 <!--                                <div class="w-full flex flex-col mt-6">-->
 <!--                                    <label for="tag" class="pb-2 text-sm font-semibold text-gray-800">By Tag</label>-->
 <!--                                    <v-select multiple id="tag" v-model="tagArray" :options="tags" label="name"-->
