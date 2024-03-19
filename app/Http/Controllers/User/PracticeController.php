@@ -100,10 +100,12 @@ class PracticeController extends Controller
         })->where('user_id', auth()->user()->id)->pending()
             ->orderBy('updated_at', 'desc')->limit(1)->get();
 
+        $currentPracticeId = $practiceSessions->first()->practiceSet->id ?? null;
 
         return Inertia::render('User/QBankDashboard', [
             'subscription' => request()->user()->hasActiveSubscription($category->id, 'practice_sets'),
             'practiceSessions' => fractal($practiceSessions, new PracticeSessionCardTransformer())->toArray()['data'],
+            'currentPracticeId' => $currentPracticeId
         ]);
     }
 

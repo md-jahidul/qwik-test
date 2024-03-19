@@ -24,31 +24,38 @@
                     </div>
                     <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4 auto-rows-auto justify-center mb-6">
                         <template v-for="(practiceSet, index) in practiceSets">
-                            <practice-set-card :practice-set="practiceSet" :show-skill="true" :show-account-type="true">
-                                <template #action>
-                                    <button @click="showSubscribeModal" v-if="practiceSet.paid && !subscription" class="qt-btn qt-btn-sm bg-gray-300 inline-flex items-center">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path></svg>
-                                        <span>{{ __('Unlock') }}</span>
-                                    </button>
-                                    <inertia-link v-else :href="route('init_practice_set', {slug: practiceSet.slug})">
-                                        <div class="qt-btn qt-btn-sm qt-btn-primary">{{ __('Start Practice') }}</div>
-                                    </inertia-link>
-                                </template>
-                            </practice-set-card>
-                        </template>
-                    </div>
-                    <div v-if="practiceSessions.length > 0" class="grid grid-cols-1 mb-6">
-                        <template v-for="(practiceSession, index) in practiceSessions">
+                            <div v-if="currentPracticeId !== practiceSet.id">
+                                <practice-set-card :practice-set="practiceSet" :show-skill="true" :show-account-type="true">
+                                    <template #action>
+                                        <button @click="showSubscribeModal" v-if="practiceSet.paid && !subscription" class="qt-btn qt-btn-sm bg-gray-300 inline-flex items-center">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path></svg>
+                                            <span>{{ __('Unlock') }}</span>
+                                        </button>
+                                        <inertia-link v-else :href="route('init_practice_set', {slug: practiceSet.slug})">
+                                            <div class="qt-btn qt-btn-sm qt-btn-primary">{{ __('Start Practice') }}</div>
+                                        </inertia-link>
+                                    </template>
+                                </practice-set-card>
+                            </div>
 
-                            <practice-session-card :practice-session="practiceSession">
-                                <template #action>
-                                    <inertia-link :href="route('init_practice_set', {slug: practiceSession.slug})">
-                                        <span class="qt-btn qt-btn-sm qt-btn-primary">{{ __('Resume Practice') }}</span>
-                                    </inertia-link>
-                                </template>
-                            </practice-session-card>
+                            <div v-else>
+                                <div v-else v-if="practiceSessions.length > 0" class="grid grid-cols-1 mb-6">
+                                    <template v-for="(practiceSession, index) in practiceSessions">
+
+                                        <practice-session-card :practice-session="practiceSession">
+                                            <template #action>
+                                                <inertia-link :href="route('init_practice_set', {slug: practiceSession.slug})">
+                                                    <span class="qt-btn qt-btn-sm qt-btn-primary">{{ __('Resume Practice') }}</span>
+                                                </inertia-link>
+                                            </template>
+                                        </practice-session-card>
+                                    </template>
+                                </div>
+                            </div>
+
                         </template>
                     </div>
+
                     <div class="mb-6" v-if="!loading && practiceSets.length === 0" >
                         <empty-student-card :title="'No practice tests found in this Skill'"></empty-student-card>
                     </div>
@@ -71,6 +78,8 @@ import EmptyStudentCard from "@/Components/Cards/EmptyStudentCard";
 import PracticeSetCardShimmer from "@/Components/Shimmers/PracticeSetCardShimmer";
 import BackButton from "@/Components/BackButton";
 import PracticeSessionCard from "@/Components/Cards/PracticeSessionCard.vue";
+import Integer from "vuelidate/lib/validators/integer";
+import Number from "vue-good-table/src/components/types/number";
 export default {
     components: {
         PracticeSessionCard,
@@ -82,6 +91,7 @@ export default {
     },
     props: {
         practiceSessions: Array,
+        currentPracticeId: Number,
         subscription: {
             type: Boolean,
             default: false,

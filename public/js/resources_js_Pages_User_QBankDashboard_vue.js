@@ -824,6 +824,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_Shimmers_PracticeSetCardShimmer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Components/Shimmers/PracticeSetCardShimmer */ "./resources/js/Components/Shimmers/PracticeSetCardShimmer.vue");
 /* harmony import */ var _Components_BackButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Components/BackButton */ "./resources/js/Components/BackButton.vue");
 /* harmony import */ var _Components_Cards_PracticeSessionCard_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Components/Cards/PracticeSessionCard.vue */ "./resources/js/Components/Cards/PracticeSessionCard.vue");
+/* harmony import */ var vue_good_table_src_components_types_number__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-good-table/src/components/types/number */ "./node_modules/vue-good-table/src/components/types/number.js");
 //
 //
 //
@@ -890,6 +891,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
@@ -908,6 +918,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     practiceSessions: Array,
+    currentPracticeId: vue_good_table_src_components_types_number__WEBPACK_IMPORTED_MODULE_6__["default"],
     subscription: {
       type: Boolean,
       "default": false
@@ -4869,163 +4880,196 @@ var render = function () {
                     [
                       _vm._l(_vm.practiceSets, function (practiceSet, index) {
                         return [
-                          _c("practice-set-card", {
-                            attrs: {
-                              "practice-set": practiceSet,
-                              "show-skill": true,
-                              "show-account-type": true,
-                            },
-                            scopedSlots: _vm._u(
-                              [
-                                {
-                                  key: "action",
-                                  fn: function () {
-                                    return [
-                                      practiceSet.paid && !_vm.subscription
-                                        ? _c(
-                                            "button",
-                                            {
-                                              staticClass:
-                                                "qt-btn qt-btn-sm bg-gray-300 inline-flex items-center",
-                                              on: {
-                                                click: _vm.showSubscribeModal,
-                                              },
-                                            },
-                                            [
-                                              _c(
-                                                "svg",
-                                                {
-                                                  staticClass: "w-4 h-4 mr-1",
-                                                  attrs: {
-                                                    fill: "none",
-                                                    stroke: "currentColor",
-                                                    viewBox: "0 0 24 24",
-                                                    xmlns:
-                                                      "http://www.w3.org/2000/svg",
-                                                  },
-                                                },
-                                                [
-                                                  _c("path", {
-                                                    attrs: {
-                                                      "stroke-linecap": "round",
-                                                      "stroke-linejoin":
-                                                        "round",
-                                                      "stroke-width": "2",
-                                                      d: "M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z",
+                          _vm.currentPracticeId !== practiceSet.id
+                            ? _c(
+                                "div",
+                                [
+                                  _c("practice-set-card", {
+                                    attrs: {
+                                      "practice-set": practiceSet,
+                                      "show-skill": true,
+                                      "show-account-type": true,
+                                    },
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "action",
+                                          fn: function () {
+                                            return [
+                                              practiceSet.paid &&
+                                              !_vm.subscription
+                                                ? _c(
+                                                    "button",
+                                                    {
+                                                      staticClass:
+                                                        "qt-btn qt-btn-sm bg-gray-300 inline-flex items-center",
+                                                      on: {
+                                                        click:
+                                                          _vm.showSubscribeModal,
+                                                      },
                                                     },
-                                                  }),
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c("span", [
-                                                _vm._v(
-                                                  _vm._s(_vm.__("Unlock"))
-                                                ),
-                                              ]),
-                                            ]
-                                          )
-                                        : _c(
-                                            "inertia-link",
-                                            {
-                                              attrs: {
-                                                href: _vm.route(
-                                                  "init_practice_set",
-                                                  { slug: practiceSet.slug }
-                                                ),
-                                              },
-                                            },
-                                            [
-                                              _c(
-                                                "div",
-                                                {
-                                                  staticClass:
-                                                    "qt-btn qt-btn-sm qt-btn-primary",
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    _vm._s(
-                                                      _vm.__("Start Practice")
-                                                    )
+                                                    [
+                                                      _c(
+                                                        "svg",
+                                                        {
+                                                          staticClass:
+                                                            "w-4 h-4 mr-1",
+                                                          attrs: {
+                                                            fill: "none",
+                                                            stroke:
+                                                              "currentColor",
+                                                            viewBox:
+                                                              "0 0 24 24",
+                                                            xmlns:
+                                                              "http://www.w3.org/2000/svg",
+                                                          },
+                                                        },
+                                                        [
+                                                          _c("path", {
+                                                            attrs: {
+                                                              "stroke-linecap":
+                                                                "round",
+                                                              "stroke-linejoin":
+                                                                "round",
+                                                              "stroke-width":
+                                                                "2",
+                                                              d: "M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z",
+                                                            },
+                                                          }),
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c("span", [
+                                                        _vm._v(
+                                                          _vm._s(
+                                                            _vm.__("Unlock")
+                                                          )
+                                                        ),
+                                                      ]),
+                                                    ]
+                                                  )
+                                                : _c(
+                                                    "inertia-link",
+                                                    {
+                                                      attrs: {
+                                                        href: _vm.route(
+                                                          "init_practice_set",
+                                                          {
+                                                            slug: practiceSet.slug,
+                                                          }
+                                                        ),
+                                                      },
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "qt-btn qt-btn-sm qt-btn-primary",
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            _vm._s(
+                                                              _vm.__(
+                                                                "Start Practice"
+                                                              )
+                                                            )
+                                                          ),
+                                                        ]
+                                                      ),
+                                                    ]
                                                   ),
-                                                ]
-                                              ),
                                             ]
-                                          ),
-                                    ]
-                                  },
-                                  proxy: true,
-                                },
-                              ],
-                              null,
-                              true
-                            ),
-                          }),
+                                          },
+                                          proxy: true,
+                                        },
+                                      ],
+                                      null,
+                                      true
+                                    ),
+                                  }),
+                                ],
+                                1
+                              )
+                            : _c("div", [
+                                _vm.practiceSessions.length > 0
+                                  ? _c(
+                                      "div",
+                                      {
+                                        directives: [
+                                          { name: "else", rawName: "v-else" },
+                                        ],
+                                        staticClass: "grid grid-cols-1 mb-6",
+                                      },
+                                      [
+                                        _vm._l(
+                                          _vm.practiceSessions,
+                                          function (practiceSession, index) {
+                                            return [
+                                              _c("practice-session-card", {
+                                                attrs: {
+                                                  "practice-session":
+                                                    practiceSession,
+                                                },
+                                                scopedSlots: _vm._u(
+                                                  [
+                                                    {
+                                                      key: "action",
+                                                      fn: function () {
+                                                        return [
+                                                          _c(
+                                                            "inertia-link",
+                                                            {
+                                                              attrs: {
+                                                                href: _vm.route(
+                                                                  "init_practice_set",
+                                                                  {
+                                                                    slug: practiceSession.slug,
+                                                                  }
+                                                                ),
+                                                              },
+                                                            },
+                                                            [
+                                                              _c(
+                                                                "span",
+                                                                {
+                                                                  staticClass:
+                                                                    "qt-btn qt-btn-sm qt-btn-primary",
+                                                                },
+                                                                [
+                                                                  _vm._v(
+                                                                    _vm._s(
+                                                                      _vm.__(
+                                                                        "Resume Practice"
+                                                                      )
+                                                                    )
+                                                                  ),
+                                                                ]
+                                                              ),
+                                                            ]
+                                                          ),
+                                                        ]
+                                                      },
+                                                      proxy: true,
+                                                    },
+                                                  ],
+                                                  null,
+                                                  true
+                                                ),
+                                              }),
+                                            ]
+                                          }
+                                        ),
+                                      ],
+                                      2
+                                    )
+                                  : _vm._e(),
+                              ]),
                         ]
                       }),
                     ],
                     2
                   ),
-              _vm._v(" "),
-              _vm.practiceSessions.length > 0
-                ? _c(
-                    "div",
-                    { staticClass: "grid grid-cols-1 mb-6" },
-                    [
-                      _vm._l(
-                        _vm.practiceSessions,
-                        function (practiceSession, index) {
-                          return [
-                            _c("practice-session-card", {
-                              attrs: { "practice-session": practiceSession },
-                              scopedSlots: _vm._u(
-                                [
-                                  {
-                                    key: "action",
-                                    fn: function () {
-                                      return [
-                                        _c(
-                                          "inertia-link",
-                                          {
-                                            attrs: {
-                                              href: _vm.route(
-                                                "init_practice_set",
-                                                { slug: practiceSession.slug }
-                                              ),
-                                            },
-                                          },
-                                          [
-                                            _c(
-                                              "span",
-                                              {
-                                                staticClass:
-                                                  "qt-btn qt-btn-sm qt-btn-primary",
-                                              },
-                                              [
-                                                _vm._v(
-                                                  _vm._s(
-                                                    _vm.__("Resume Practice")
-                                                  )
-                                                ),
-                                              ]
-                                            ),
-                                          ]
-                                        ),
-                                      ]
-                                    },
-                                    proxy: true,
-                                  },
-                                ],
-                                null,
-                                true
-                              ),
-                            }),
-                          ]
-                        }
-                      ),
-                    ],
-                    2
-                  )
-                : _vm._e(),
               _vm._v(" "),
               !_vm.loading && _vm.practiceSets.length === 0
                 ? _c(
