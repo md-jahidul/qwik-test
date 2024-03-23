@@ -14,6 +14,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Spatie\SchemalessAttributes\SchemalessAttributesTrait;
@@ -95,6 +96,11 @@ class PracticeSet extends Model
     public function sessions()
     {
         return $this->hasMany(PracticeSession::class);
+    }
+
+    public function session(): HasOne
+    {
+        return $this->hasOne(PracticeSession::class);
     }
 
     /*

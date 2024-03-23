@@ -91,21 +91,8 @@ class PracticeController extends Controller
     public function qbankList()
     {
         $category = auth()->user()->selectedSyllabus();
-
-        // Fetch current user in-completed practice sessions
-        $practiceSessions = PracticeSession::with(['practiceSet' => function($query) {
-            $query->with('skill:id,name');
-        }])->whereHas('practiceSet', function (Builder $query) use ($category) {
-            $query->where('sub_category_id', $category->id);
-        })->where('user_id', auth()->user()->id)->pending()
-            ->orderBy('updated_at', 'desc')->limit(1)->get();
-
-        $currentPracticeId = $practiceSessions->first()->practiceSet->id ?? null;
-
         return Inertia::render('User/QBankDashboard', [
             'subscription' => request()->user()->hasActiveSubscription($category->id, 'practice_sets'),
-            'practiceSessions' => fractal($practiceSessions, new PracticeSessionCardTransformer())->toArray()['data'],
-            'currentPracticeId' => $currentPracticeId
         ]);
     }
 
@@ -116,8 +103,10 @@ class PracticeController extends Controller
     public function fetchAllPracticeSets()
     {
         $category = auth()->user()->selectedSyllabus();
+
         $practiceSets = fractal(PracticeSet::published()
             ->where('sub_category_id', $category->id)
+            ->with('session')
             ->paginate(20), new PracticeSetCardTransformer())
             ->toArray();
 

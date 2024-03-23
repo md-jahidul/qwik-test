@@ -21,6 +21,17 @@ class PracticeSetCardTransformer extends TransformerAbstract
      */
     public function transform(PracticeSet $practiceSet)
     {
+        $practiceSessions = null;
+        if ($practiceSet->session){
+            $practiceSessions = [
+                "code" => $practiceSet->session->code,
+                "title" => $practiceSet->title,
+                "slug" => $practiceSet->slug,
+                "total_questions" => $practiceSet->total_questions,
+                "skill" => $practiceSet->skill->name,
+                "percentage_completed" => $practiceSet->session->percentage_completed
+            ];
+        }
         return [
             'id' => $practiceSet->id,
             'title' => $practiceSet->title,
@@ -28,6 +39,7 @@ class PracticeSetCardTransformer extends TransformerAbstract
             'total_questions' => $practiceSet->total_questions,
             'skill' => $practiceSet->skill->name,
             'paid' => $practiceSet->is_paid,
+            'practice_session' => $practiceSessions
         ];
     }
 }
